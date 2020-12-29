@@ -19,7 +19,7 @@
 
 class Administrateur {
 
-    list<Administrateur*> administrateurs; // contient toutes les instances de la classe Administrateur
+    static list<Administrateur*> administrateurs; // contient toutes les instances de la classe Administrateur
 
     string identifiant, mot_de_passe;
     bool connected;
@@ -27,7 +27,7 @@ class Administrateur {
     public :
         Administrateur(const char* const, const char* const);
         bool seConnecter();
-        void ajouterVol(int, int, int, Destination, Date);
+        void ajouterVol(int, int, const char* const, const char* const, int, int, int, int, int);
         void ajouterPassager(const char* const, const char* const, const char* const, const char* const, int);
         void AfficherListeVols();
         void AfficherListePassagers();

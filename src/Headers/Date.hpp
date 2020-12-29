@@ -7,11 +7,17 @@ using namespace std;
 
 class Date {
 
-    int minute, heure, jour, mois, annee;
+    int annee, mois, jour, heures, minutes;
     
     public :
         Date(int, int, int, int, int);
-        bool operator < (const Date &) const;
+        bool operator < (Date &);
+        friend ostream& operator <<(ostream &, Date &);
+        int getAnnee();
+        int getMois();
+        int getJour();
+        int getHeures();
+        int getMinutes();
 };
 
 #endif

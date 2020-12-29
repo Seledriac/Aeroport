@@ -20,10 +20,9 @@ class Reservation {
 
     public :
         Reservation(Passager*, Vol*);
-        bool Confirmer();
-        bool Annuler();
+        void Confirmer();
+        void Annuler();
         static Reservation* getReservation(int);
-        static list<Reservation*> getReservations();
         void afficherReservation();
         string getNum_passeport();
         int getNum_reservation();
