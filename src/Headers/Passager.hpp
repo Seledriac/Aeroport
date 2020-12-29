@@ -27,13 +27,10 @@ class Passager {
         void AfficherListeReservations();
         bool ExistenceVol(int);
         bool ExistenceReservation(int);
-<<<<<<< Updated upstream
         static list<Passager*> getPassagers();
         string getNum_passeport();
-=======
         static Passager* getPassager();
         void afficherPassager();
->>>>>>> Stashed changes
 };
 
 #ifndef Reservation_H_

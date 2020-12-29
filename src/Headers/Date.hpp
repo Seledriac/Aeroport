@@ -18,6 +18,11 @@ class Date {
         int getJour();
         int getHeures();
         int getMinutes();
+        void setAnnee(int);
+        void setMois(int);
+        void setJour(int);
+        void setHeures(int);
+        void setMinutes(int);
 };
 
 #endif

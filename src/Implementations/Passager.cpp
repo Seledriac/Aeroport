@@ -10,6 +10,8 @@
 #include <Vol.hpp>
 #endif
 
+#include <iostream>
+
 Passager::Passager(const char* const nom, const char* const prenom, const char* const titre, const char* const num_passeport, int age) {    
     this->nom = nom;
     this->nom = prenom;
@@ -68,7 +70,6 @@ bool Passager::ExistenceReservation(int num_reservation) {
     return reservation_existe;
 }
 
-<<<<<<< Updated upstream
 list<Passager*> Passager::getPassagers() {
     list<Passager*> liste;
     for(list<Passager*>::const_iterator it = passagers.begin(); it != passagers.end(); it++) {
@@ -80,13 +81,7 @@ list<Passager*> Passager::getPassagers() {
 string Passager::getNum_passeport() {
     return num_passeport;
 }
-=======
-Passager* Passager:: getPassager()
-{
-    return this;
-}
 
 void Passager::afficherPassager() {
-    cout<<"Passager: "<< this->titre <<" "<< this->prenom<<" "<<this->nom<<", "<<this->age<<" ans"<<endl;
+    cout << "Passager: " << this->titre << " "<< this->prenom << " " << this->nom << ", " << this->age << " ans";
 }
->>>>>>> Stashed changes

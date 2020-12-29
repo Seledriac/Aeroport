@@ -31,6 +31,7 @@ class Vol {
         int getPrix();
         Destination getDestination();
         Date getDate();
+        void setDate(int, int, int, int, int);
         void afficherVol();        
 };
 

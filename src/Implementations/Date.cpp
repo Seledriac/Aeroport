@@ -68,3 +68,23 @@ ostream& operator <<(ostream &os, Date &date) {
     }
     return os << date.getJour() << " " << mois << " " << date.getAnnee() << ", " << date.getHeures() << ":" << date.getMinutes();
 }
+
+void Date::setAnnee(int annee) {
+    this->annee = annee;
+}
+
+void Date::setMois(int mois) {
+    this->mois = mois;
+}
+
+void Date::setJour(int jour) {
+    this->jour = jour;
+}
+
+void Date::setHeures(int heures) {
+    this->heures = heures;
+}
+
+void Date::setMinutes(int minutes) {
+    this->minutes = minutes;
+}

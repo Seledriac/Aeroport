@@ -54,6 +54,14 @@ Date Vol::getDate() {
     return date;
 }
 
+void Vol::setDate(int annee, int mois, int jour, int heures, int minutes) {
+    date.setAnnee(annee);
+    date.setMois(mois);
+    date.setJour(jour);
+    date.setHeures(heures);
+    date.setMinutes(minutes);
+}
+
 void Vol::afficherVol() {
     cout << num_vol << " => " << dest <<  " - Date : " << date << " - Prix : " << prix << " - Nombre de places restantes : " << nb_places;
 }

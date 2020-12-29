@@ -12,22 +12,16 @@ Administrateur::Administrateur(const char *const identifiant, const char *const 
 {
     this->identifiant = identifiant;
     this->mot_de_passe = MotDePasse;
-    this->connected = false;
     this->administrateurs.push_back(this);
+    // connexion bdd
 }
 
-bool Administrateur::seConnecter(){
-
+inline void Administrateur::ajouterVol(int nb_de_places, int prix, const char* const ville_depart, const char* const ville_destination, int annee, int mois, int jour, int heures, int minutes){
+    Vol(nb_de_places, prix, ville_depart, ville_destination, annee, mois, jour, heures, minutes);
 }
 
-void Administrateur::ajouterVol(int num_vol, int nb_de_places, int prix, Destination destination, Date date){
-    list<Vol*> vols = Vol::getVols();
-    Vol nouveau_vol = Vol(num_vol,nb_de_places,prix,destination,date);
-    vols.push_back(nouveau_vol);
-}
-
-void ajouterPassager(const char* const, const char* const, const char* const, const char* const, int){
-    // getter Passager à mettre 
+void ajouterPassager(const char* const nom, const char* const prenom, const char* const titre, const char* const num_passeport, int age) {
+    Passager(nom, prenom, titre, num_passeport, age);
 }
 
 void Administrateur:: AfficherListeVols(){
@@ -38,29 +32,29 @@ void Administrateur:: AfficherListeVols(){
 }
 
 void Administrateur::AfficherListePassagers(){
-    list<Passager*> passagers = Passager::getPassager();
+    list<Passager*> passagers = Passager::getPassagers();
     for(list<Passager*>::const_iterator it = passagers.begin(); it != passagers.end(); it++) {
         (*it)->afficherPassager();
     } 
 }
 
-void ajouterReservation(Passager*, Vol*){
-    
+void Administrateur::ajouterReservation(Passager* passager, Vol* vol){
+    Reservation(passager, vol);
 }
 
-void ajouterDestination(const char* const, const char* const){
-
+void Administrateur::ModifierDateVol(int num_vol, int annee, int mois, int jour, int heures, int minutes){
+    Vol::getVol(num_vol)->setDate(annee, mois, jour, heures, minutes);
 }
 
-void ModifierHeureVol(Vol *){
-
-}
-
-void ModifierDateVol(Vol *){
-
-}
-
-bool ExistenceVol(Vol *){
-
+bool ExistenceVol(int num_vol){
+    bool vol_existe = false;
+    list<Vol*> vols = Vol::getVols();
+    for(list<Vol*>::const_iterator it = vols.begin(); it != vols.end(); it++) {
+        if((*it)->getNum_vol() == num_vol) {
+            vol_existe = true;
+            break;
+        }            
+    }
+    return vol_existe;
 }
 
