@@ -21,10 +21,10 @@ class Passager {
     public :
         Passager(const char* const, const char* const, const char* const, const char* const, int);
         void ReserverVol(int);
-        bool ConfirmerReservation(int);
+        void ConfirmerReservation(int);
         void AnnulerReservation(int);
-        void AfficherListeVols() const;
-        void AfficherListeReservations() const;
+        void AfficherListeVols();
+        void AfficherListeReservations();
         bool ExistenceVol(int);
         bool ExistenceReservation(int);
 };

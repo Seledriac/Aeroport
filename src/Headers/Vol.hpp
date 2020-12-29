@@ -15,7 +15,7 @@ class Reservation;
 
 class Vol {
 
-    list<Vol*> vols;
+    static list<Vol*> vols;
 
     vector<Reservation*> reservations;
 
@@ -25,6 +25,14 @@ class Vol {
 
     public :
         Vol(int, int, int, Destination, Date);
+        static Vol* getVol(int);
+        static list<Vol*> getVols();
+        int getNum_vol();
+        int getNb_places();
+        int getPrix();
+        Destination getDestination();
+        Date getDate();
+        void afficherVol();
 };
 
 #ifndef Reservation_H_

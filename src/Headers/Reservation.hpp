@@ -11,7 +11,7 @@
 
 class Reservation {
 
-    list<Reservation*> reservations;
+    static list<Reservation*> reservations;
 
     string num_passeport;
     int num_reservation;
@@ -22,6 +22,12 @@ class Reservation {
         Reservation(Passager*, Vol*);
         bool Confirmer();
         bool Annuler();
+        static Reservation* getReservation(int);
+        static list<Reservation*> getReservations();
+        void afficherReservation();
+        string getNum_passeport();
+        int getNum_reservation();
+        int getNum_vol();
 }; 
 
 #endif
