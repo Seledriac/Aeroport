@@ -29,10 +29,13 @@ class Administrateur {
         bool seConnecter();
         void ajouterVol(int, int, int, Destination, Date);
         void ajouterPassager(const char* const, const char* const, const char* const, const char* const, int);
-        void AfficherListeVols() const;
-        void AfficherListePassagers() const;
+        void AfficherListeVols();
+        void AfficherListePassagers();
         void ajouterReservation(Passager*, Vol*);
         void ajouterDestination(const char* const, const char* const);
+        void ModifierHeureVol(Vol *);
+        void ModifierDateVol(Vol *);
+        bool ExistenceVol(Vol *);
 };
 
 #endif

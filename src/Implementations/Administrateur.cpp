@@ -1,38 +1,66 @@
 #ifndef Administrateur_H_
-#define Administrateur_H_
-
-#ifndef Destination_H_
-#include <Destination.hpp>
-#endif
-
-#ifndef Date_H_
-#include <Date.hpp>
-#endif
-
-#ifndef Passager_H_
-#include <Passager.hpp>
+#include <Administrateur.hpp>
 #endif
 
 #ifndef Vol_H_
 #include <Vol.hpp>
 #endif
 
-class Administrateur {
+#include <iostream>
 
-    list<Administrateur*> administrateurs; // contient toutes les instances de la classe Administrateur
+Administrateur::Administrateur(const char *const identifiant, const char *const MotDePasse)
+{
+    this->identifiant = identifiant;
+    this->mot_de_passe = MotDePasse;
+    this->connected = false;
+    this->administrateurs.push_back(this);
+}
 
-    string identifiant, mot_de_passe;
-    bool connected;
+bool Administrateur::seConnecter(){
 
-    public :
-        Administrateur(const char* const, const char* const);
-        bool seConnecter();
-        void ajouterVol(int, int, int, Destination, Date);
-        void ajouterPassager(const char* const, const char* const, const char* const, const char* const, int);
-        void AfficherListeVols() const;
-        void AfficherListePassagers() const;
-        void ajouterReservation(Passager*, Vol*);
-        void ajouterDestination(const char* const, const char* const);
-};
+}
 
-#endif
+void Administrateur::ajouterVol(int num_vol, int nb_de_places, int prix, Destination destination, Date date){
+    list<Vol*> vols = Vol::getVols();
+    Vol nouveau_vol = Vol(num_vol,nb_de_places,prix,destination,date);
+    vols.push_back(nouveau_vol);
+}
+
+void ajouterPassager(const char* const, const char* const, const char* const, const char* const, int){
+    // getter Passager à mettre 
+}
+
+void Administrateur:: AfficherListeVols(){
+    list<Vol*> vols = Vol::getVols();
+    for(list<Vol*>::const_iterator it = vols.begin(); it != vols.end(); it++) {
+        (*it)->afficherVol();
+    }
+}
+
+void Administrateur::AfficherListePassagers(){
+    list<Passager*> passagers = Passager::getPassager();
+    for(list<Passager*>::const_iterator it = passagers.begin(); it != passagers.end(); it++) {
+        (*it)->afficherPassager();
+    } 
+}
+
+void ajouterReservation(Passager*, Vol*){
+    
+}
+
+void ajouterDestination(const char* const, const char* const){
+
+}
+
+void ModifierHeureVol(Vol *){
+
+}
+
+void ModifierDateVol(Vol *){
+
+}
+
+bool ExistenceVol(Vol *){
+
+}
+
