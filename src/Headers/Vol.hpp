@@ -17,22 +17,21 @@ class Vol {
 
     static list<Vol*> vols;
 
-    vector<Reservation*> reservations;
-
     int num_vol, nb_places, prix;
     Destination dest;
     Date date;
 
     public :
-        Vol(int, int, int, Destination, Date);
+        Vol(int, int, const char* const, const char* const, int, int, int, int, int);
         static Vol* getVol(int);
         static list<Vol*> getVols();
         int getNum_vol();
         int getNb_places();
+        void setNbPlaces(int);
         int getPrix();
         Destination getDestination();
         Date getDate();
-        void afficherVol();
+        void afficherVol();        
 };
 
 #ifndef Reservation_H_

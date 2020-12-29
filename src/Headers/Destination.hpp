@@ -2,17 +2,17 @@
 #define Destination_H_
 
 #include <list>
+#include <string>
 
 using namespace std;
 
 class Destination {
 
-    list<Destination*> destinations;
-
     string ville_depart, ville_arrivee;
     
     public :
         Destination(const char* const, const char* const);
+        friend ostream& operator <<(ostream &, Destination &);
 };
 
 #endif

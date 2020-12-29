@@ -1,27 +1,52 @@
 #ifndef Reservation_H_
-#define Reservation_H_
-
-#ifndef Passager_H_
-#include <Passager.hpp>
+#include <Reservation.hpp>
 #endif
 
-#ifndef Vol_H_
-#include <Vol.hpp>
-#endif
+#include <iostream>
 
-class Reservation {
+Reservation::Reservation(Passager* passager, Vol* vol) {
+    num_passeport = passager->getNum_passeport();
+    num_vol = vol->getNum_vol();
+    num_reservation = reservations.size() + 1;
+    confirmation = false;
+    reservations.push_back(this);
+}
 
-    list<Reservation*> reservations;
+void Reservation::Confirmer() {
+    if(!confirmation) {
+        confirmation = true;
+        Vol::getVol(num_vol)->setNbPlaces(Vol::getVol(num_vol)->getNb_places() - 1);
+    }
+}
 
-    string num_passeport;
-    int num_reservation;
-    int num_vol;
-    bool confirmation;
+void Reservation::Annuler() {
+    if(confirmation) {
+        confirmation = false;    
+        Vol::getVol(num_vol)->setNbPlaces(Vol::getVol(num_vol)->getNb_places() + 1);
+    }
+}
 
-    public :
-        Reservation(Passager*, Vol*);
-        bool Confirmer();
-        bool Annuler();
-}; 
+Reservation* Reservation::getReservation(int num_reservation) {
+    for(list<Reservation*>::const_iterator it = reservations.begin(); it != reservations.end(); it++) {
+        if((*it)->num_reservation == num_reservation) {
+            return (*it);
+        }  
+    }
+    return NULL;
+}
 
-#endif
+void Reservation::afficherReservation() {
+    cout << num_reservation << " => Passager : " << num_passeport << "; Vol : " << num_vol;
+}
+
+string Reservation::getNum_passeport() {
+    return num_passeport;
+}
+
+int Reservation::getNum_reservation() {
+    return num_reservation;
+}
+
+int Reservation::getNum_vol() {
+    return num_vol;
+}

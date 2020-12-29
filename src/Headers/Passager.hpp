@@ -11,7 +11,7 @@ using namespace std;
 
 class Passager {
 
-    list<Passager*> passagers; // contient toutes les instances de la classe Passager
+    static list<Passager*> passagers; // contient toutes les instances de la classe Passager
 
     vector<Reservation*> reservations;
 
@@ -27,6 +27,8 @@ class Passager {
         void AfficherListeReservations();
         bool ExistenceVol(int);
         bool ExistenceReservation(int);
+        static list<Passager*> getPassagers();
+        string getNum_passeport();
 };
 
 #ifndef Reservation_H_

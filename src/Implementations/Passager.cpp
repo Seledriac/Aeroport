@@ -10,8 +10,6 @@
 #include <Vol.hpp>
 #endif
 
-#include <iostream>
-
 Passager::Passager(const char* const nom, const char* const prenom, const char* const titre, const char* const num_passeport, int age) {    
     this->nom = nom;
     this->nom = prenom;
@@ -65,7 +63,19 @@ bool Passager::ExistenceReservation(int num_reservation) {
         if((*it)->getNum_reservation() == num_reservation) {
             reservation_existe = true;
             break;
-        }            
+        }
     }
     return reservation_existe;
+}
+
+list<Passager*> Passager::getPassagers() {
+    list<Passager*> liste;
+    for(list<Passager*>::const_iterator it = passagers.begin(); it != passagers.end(); it++) {
+        liste.push_back(*it);
+    }
+    return liste;
+}
+
+string Passager::getNum_passeport() {
+    return num_passeport;
 }
