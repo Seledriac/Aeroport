@@ -28,12 +28,14 @@ class Administrateur {
     public :
         static Administrateur* getAdministrateur(string, string);
         void ajouterVol(int, int, string, string, int, int, int, int, int);
-        void ajouterPassager(string, string, string, string, int);
+        void ajouterPassager(string, string, string, string, string, int);
+        bool ajouterReservation(Passager*, Vol*);
         void AfficherListeVols();
         void AfficherListePassagers();
-        void ajouterReservation(Passager*, Vol*);
+        void AfficherListeReservations(int);
         void ModifierDateVol(int, int, int, int, int, int);
         bool ExistenceVol(int);
+        bool ExistencePassager(string);
         static void chargerAdministrateurs();
         string getIdentifiant();
         string getMot_de_passe();

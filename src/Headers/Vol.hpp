@@ -33,7 +33,8 @@ class Vol {
         Destination* getDestination();
         Date* getDate();
         void setDate(int, int, int, int, int);
-        void afficherVol();        
+        void afficherVol();
+        static void chargerVols();     
 };
 
 #ifndef Reservation_H_

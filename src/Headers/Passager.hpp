@@ -15,12 +15,15 @@ class Passager {
 
     vector<Reservation*> reservations;
 
-    string nom, prenom, titre, num_passeport;
+    string nom, prenom, titre, num_passeport, mot_de_passe;
     int age;
 
-    public :
-        Passager(string, string, string, string, int);
-        void ReserverVol(int);
+    Passager(string, string, string, string, string, int);
+
+    public :    
+        static Passager* getPassager(string, string);
+        static void nouveauPassager(string, string, string, string, string, int);
+        bool ReserverVol(int);
         void ConfirmerReservation(int);
         void AnnulerReservation(int);
         void AfficherListeVols();
@@ -29,8 +32,11 @@ class Passager {
         bool ExistenceReservation(int);
         static list<Passager*> getPassagers();
         string getNum_passeport();
-        static Passager* getPassager();
+        string getPrenom();
+        string getNom();
+        static Passager* getPassager(string);
         void afficherPassager();
+        static void chargerPassagers();
 };
 
 #ifndef Reservation_H_

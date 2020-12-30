@@ -23,10 +23,12 @@ class Reservation {
         void Confirmer();
         void Annuler();
         static Reservation* getReservation(int);
+        static list<Reservation*> getReservations();
         void afficherReservation();
         string getNum_passeport();
         int getNum_reservation();
         int getNum_vol();
+        static void chargerReservations();
 }; 
 
 #endif

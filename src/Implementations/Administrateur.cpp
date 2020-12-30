@@ -30,8 +30,8 @@ void Administrateur::ajouterVol(int nb_de_places, int prix, string ville_depart,
     new Vol(nb_de_places, prix, ville_depart, ville_destination, annee, mois, jour, heures, minutes);
 }
 
-void ajouterPassager(string nom, string prenom, string titre, string num_passeport, int age) {
-    new Passager(nom, prenom, titre, num_passeport, age);
+void Administrateur::ajouterPassager(string nom, string prenom, string titre, string num_passeport, string mot_de_passe, int age) {
+    Passager::nouveauPassager(nom, prenom, titre, num_passeport, mot_de_passe, age);
 }
 
 void Administrateur::AfficherListeVols(){
@@ -44,14 +44,26 @@ void Administrateur::AfficherListeVols(){
 }
 
 void Administrateur::AfficherListePassagers(){
+    cout << endl;
     list<Passager*> passagers = Passager::getPassagers();
     for(list<Passager*>::const_iterator it = passagers.begin(); it != passagers.end(); it++) {
         (*it)->afficherPassager();
     } 
+    cout << endl;
 }
 
-void Administrateur::ajouterReservation(Passager* passager, Vol* vol){
-    Reservation(passager, vol);
+void Administrateur::AfficherListeReservations(int num_vol){
+    cout << endl;
+    list<Reservation*> reservations = Reservation::getReservations();
+    for(list<Reservation*>::const_iterator it = reservations.begin(); it != reservations.end(); it++) {
+        if((*it)->getNum_vol() == num_vol || num_vol == 0)
+            (*it)->afficherReservation();
+    } 
+    cout << endl;
+}
+
+bool Administrateur::ajouterReservation(Passager* passager, Vol* vol){    
+    return passager->ReserverVol(vol->getNum_vol());
 }
 
 void Administrateur::ModifierDateVol(int num_vol, int annee, int mois, int jour, int heures, int minutes){
@@ -70,6 +82,19 @@ bool Administrateur::ExistenceVol(int num_vol){
     return vol_existe;
 }
 
+bool Administrateur::ExistencePassager(string num_passeport){
+    bool passager_existe = false;
+    list<Passager*> passagers = Passager::getPassagers();
+    for(list<Passager*>::const_iterator it = passagers.begin(); it != passagers.end(); it++) {
+        if((*it)->getNum_passeport() == num_passeport) {
+            passager_existe = true;
+            break;
+        }            
+    }
+    return passager_existe;
+}
+
+
 void Administrateur::chargerAdministrateurs() {
     // tests
     string identifiant = "tom";
@@ -78,7 +103,7 @@ void Administrateur::chargerAdministrateurs() {
     identifiant = "antoine";
     mdp = "pass";
     administrateurs.push_back(new Administrateur(identifiant, mdp));
-    // connexion bdd (tous les administrateurs sont chargés vers la liste "administrateur")
+    // connexion bdd (tous les administrateurs sont chargés vers la liste "administrateurs")
 }
 
 string Administrateur::getIdentifiant() {

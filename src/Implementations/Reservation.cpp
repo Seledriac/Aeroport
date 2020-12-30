@@ -37,8 +37,16 @@ Reservation* Reservation::getReservation(int num_reservation) {
     return NULL;
 }
 
+list<Reservation*> Reservation::getReservations() {
+    list<Reservation*> liste;
+    for(list<Reservation*>::const_iterator it = reservations.begin(); it != reservations.end(); it++) {
+        liste.push_back(*it);
+    }
+    return liste;
+}
+
 void Reservation::afficherReservation() {
-    cout << num_reservation << " => Passager : " << num_passeport << "; Vol : " << num_vol;
+    cout << num_reservation << " => Passager : " << num_passeport << "; Vol : " << num_vol << endl;
 }
 
 string Reservation::getNum_passeport() {
@@ -51,4 +59,8 @@ int Reservation::getNum_reservation() {
 
 int Reservation::getNum_vol() {
     return num_vol;
+}
+
+void Reservation::chargerReservations() {
+    
 }
