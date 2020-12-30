@@ -4,39 +4,40 @@
 class Reservation;
 
 #ifndef Destination_H_
-#include <Destination.hpp>
+#include "Destination.hpp"
 #endif
 
 #ifndef Date_H_
-#include <Date.hpp>
+#include "Date.hpp"
 #endif
 
-#include <vector>
+#include "vector"
 
 class Vol {
 
     static list<Vol*> vols;
 
     int num_vol, nb_places, prix;
-    Destination dest;
-    Date date;
+    Destination* dest;
+    Date* date;
 
     public :
-        Vol(int, int, const char* const, const char* const, int, int, int, int, int);
+        Vol(int, int, string, string, int, int, int, int, int);
+        ~Vol();
         static Vol* getVol(int);
         static list<Vol*> getVols();
         int getNum_vol();
         int getNb_places();
         void setNbPlaces(int);
         int getPrix();
-        Destination getDestination();
-        Date getDate();
+        Destination* getDestination();
+        Date* getDate();
         void setDate(int, int, int, int, int);
         void afficherVol();        
 };
 
 #ifndef Reservation_H_
-#include <Reservation.hpp>
+#include "Reservation.hpp"
 #endif
 
 #endif

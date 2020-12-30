@@ -2,19 +2,19 @@
 #define Administrateur_H_
 
 #ifndef Destination_H_
-#include <Destination.hpp>
+#include "Destination.hpp"
 #endif
 
 #ifndef Date_H_
-#include <Date.hpp>
+#include "Date.hpp"
 #endif
 
 #ifndef Passager_H_
-#include <Passager.hpp>
+#include "Passager.hpp"
 #endif
 
 #ifndef Vol_H_
-#include <Vol.hpp>
+#include "Vol.hpp"
 #endif
 
 class Administrateur {
@@ -23,15 +23,20 @@ class Administrateur {
 
     string identifiant, mot_de_passe;
 
+    Administrateur(string, string); // privé car on ne veut pas que l'utilisateur puisse créer des administrateurs
+
     public :
-        Administrateur(const char* const, const char* const);
-        void ajouterVol(int, int, const char* const, const char* const, int, int, int, int, int);
-        void ajouterPassager(const char* const, const char* const, const char* const, const char* const, int);
+        static Administrateur* getAdministrateur(string, string);
+        void ajouterVol(int, int, string, string, int, int, int, int, int);
+        void ajouterPassager(string, string, string, string, int);
         void AfficherListeVols();
         void AfficherListePassagers();
         void ajouterReservation(Passager*, Vol*);
         void ModifierDateVol(int, int, int, int, int, int);
         bool ExistenceVol(int);
+        static void chargerAdministrateurs();
+        string getIdentifiant();
+        string getMot_de_passe();
 };
 
 #endif

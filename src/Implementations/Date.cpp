@@ -1,8 +1,9 @@
 #ifndef Date_H_
-#include <Date.hpp>
+#include "../Headers/Date.hpp"
 #endif
 
 #include <iostream>
+#include <sstream>
 
 Date::Date(int annee, int mois, int jour, int heures, int minutes) {
     this->annee = annee;
@@ -13,60 +14,66 @@ Date::Date(int annee, int mois, int jour, int heures, int minutes) {
 }
 
 bool Date::operator < (Date &date) {
-    if(annee == date.getAnnee()) {
-        if(mois == date.getMois()) {
-            if(jour == date.getJour()) {
-                if(heures == date.getHeures()) {
-                    return minutes < date.getMinutes();
-                } else return heures < date.getHeures();
-            } else return heures < date.getJour();
-        } else return jour < date.getMois();
-    } else return annee < date.getAnnee();
+    if(annee == date.annee) {
+        if(mois == date.mois) {
+            if(jour == date.jour) {
+                if(heures == date.heures) {
+                    return minutes < date.minutes;
+                } else return heures < date.heures;
+            } else return heures < date.jour;
+        } else return jour < date.mois;
+    } else return annee < date.annee;
 }
 
-ostream& operator <<(ostream &os, Date &date) {
-    string mois;
-    switch(date.getMois()) {
+string Date::to_string() const {
+    string mois_converti;
+    switch(mois) {
         case 1:
-            mois = "Janvier";
+            mois_converti = "Janvier";
             break;
         case 2:
-            mois = "Fevrier";
+            mois_converti = "Fevrier";
             break;
         case 3:
-            mois = "Mars";
+            mois_converti = "Mars";
             break;
         case 4:
-            mois = "Avril";
+            mois_converti = "Avril";
             break;
         case 5:
-            mois = "Mai";
+            mois_converti = "Mai";
             break;
         case 6:
-            mois = "Juin";
+            mois_converti = "Juin";
             break;
         case 7:
-            mois = "Juillet";
+            mois_converti = "Juillet";
             break;
         case 8:
-            mois = "Aout";
+            mois_converti = "Aout";
             break;
         case 9:
-            mois = "Septembre";
+            mois_converti = "Septembre";
             break;
         case 10:
-            mois = "Octobre";
+            mois_converti = "Octobre";
             break;
         case 11:
-            mois = "Novembre";
+            mois_converti = "Novembre";
             break;
         case 12:
-            mois = "Decembre";
+            mois_converti = "Decembre";
             break;
         default:
             break;
     }
-    return os << date.getJour() << " " << mois << " " << date.getAnnee() << ", " << date.getHeures() << ":" << date.getMinutes();
+    string mins = "";
+    if(minutes < 10) {
+        mins = "0" + std::to_string(minutes);
+    }
+    stringstream ss;
+    ss << jour << " " << mois_converti << " " << annee << ", " << heures << ":" << mins;
+    return ss.str();
 }
 
 void Date::setAnnee(int annee) {

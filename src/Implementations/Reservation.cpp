@@ -1,8 +1,10 @@
 #ifndef Reservation_H_
-#include <Reservation.hpp>
+#include "../Headers/Reservation.hpp"
 #endif
 
 #include <iostream>
+
+list<Reservation*> Reservation::reservations;
 
 Reservation::Reservation(Passager* passager, Vol* vol) {
     num_passeport = passager->getNum_passeport();

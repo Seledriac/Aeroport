@@ -19,7 +19,7 @@ class Passager {
     int age;
 
     public :
-        Passager(const char* const, const char* const, const char* const, const char* const, int);
+        Passager(string, string, string, string, int);
         void ReserverVol(int);
         void ConfirmerReservation(int);
         void AnnulerReservation(int);
@@ -34,7 +34,7 @@ class Passager {
 };
 
 #ifndef Reservation_H_
-#include <Reservation.hpp>
+#include "Reservation.hpp"
 #endif
 
 #endif

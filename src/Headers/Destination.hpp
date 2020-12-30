@@ -3,6 +3,7 @@
 
 #include <list>
 #include <string>
+#include <iostream>
 
 using namespace std;
 
@@ -11,8 +12,8 @@ class Destination {
     string ville_depart, ville_arrivee;
     
     public :
-        Destination(const char* const, const char* const);
-        friend ostream& operator <<(ostream &, Destination &);
+        Destination(string, string);
+        string to_string() const;
 };
 
 #endif

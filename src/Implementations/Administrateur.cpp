@@ -1,34 +1,46 @@
 #ifndef Administrateur_H_
-#include <Administrateur.hpp>
+#include "../Headers/Administrateur.hpp"
 #endif
 
 #ifndef Vol_H_
-#include <Vol.hpp>
+#include "../Headers/Vol.hpp"
 #endif
 
 #include <iostream>
 
-Administrateur::Administrateur(const char *const identifiant, const char *const MotDePasse)
-{
+list<Administrateur*> Administrateur::administrateurs;
+
+Administrateur::Administrateur(string identifiant, string MotDePasse) {    
     this->identifiant = identifiant;
     this->mot_de_passe = MotDePasse;
-    this->administrateurs.push_back(this);
-    // connexion bdd
 }
 
-inline void Administrateur::ajouterVol(int nb_de_places, int prix, const char* const ville_depart, const char* const ville_destination, int annee, int mois, int jour, int heures, int minutes){
-    Vol(nb_de_places, prix, ville_depart, ville_destination, annee, mois, jour, heures, minutes);
+Administrateur* Administrateur::getAdministrateur(string identifiant, string mot_de_passe) {
+    Administrateur* admin = NULL;
+    for(list<Administrateur*>::const_iterator it = administrateurs.begin(); it != administrateurs.end(); it++) {
+        if((*it)->identifiant == identifiant && (*it)->mot_de_passe == mot_de_passe) {
+            admin = *it;
+            break;
+        }
+    }
+    return admin;
 }
 
-void ajouterPassager(const char* const nom, const char* const prenom, const char* const titre, const char* const num_passeport, int age) {
-    Passager(nom, prenom, titre, num_passeport, age);
+void Administrateur::ajouterVol(int nb_de_places, int prix, string ville_depart, string ville_destination, int annee, int mois, int jour, int heures, int minutes){
+    new Vol(nb_de_places, prix, ville_depart, ville_destination, annee, mois, jour, heures, minutes);
 }
 
-void Administrateur:: AfficherListeVols(){
+void ajouterPassager(string nom, string prenom, string titre, string num_passeport, int age) {
+    new Passager(nom, prenom, titre, num_passeport, age);
+}
+
+void Administrateur::AfficherListeVols(){
+    cout << endl;
     list<Vol*> vols = Vol::getVols();
     for(list<Vol*>::const_iterator it = vols.begin(); it != vols.end(); it++) {
         (*it)->afficherVol();
     }
+    cout << endl;
 }
 
 void Administrateur::AfficherListePassagers(){
@@ -46,7 +58,7 @@ void Administrateur::ModifierDateVol(int num_vol, int annee, int mois, int jour,
     Vol::getVol(num_vol)->setDate(annee, mois, jour, heures, minutes);
 }
 
-bool ExistenceVol(int num_vol){
+bool Administrateur::ExistenceVol(int num_vol){
     bool vol_existe = false;
     list<Vol*> vols = Vol::getVols();
     for(list<Vol*>::const_iterator it = vols.begin(); it != vols.end(); it++) {
@@ -58,3 +70,20 @@ bool ExistenceVol(int num_vol){
     return vol_existe;
 }
 
+void Administrateur::chargerAdministrateurs() {
+    // tests
+    string identifiant = "tom";
+    string mdp = "pass";
+    administrateurs.push_back(new Administrateur(identifiant, mdp));
+    identifiant = "antoine";
+    mdp = "pass";
+    administrateurs.push_back(new Administrateur(identifiant, mdp));
+    // connexion bdd (tous les administrateurs sont chargés vers la liste "administrateur")
+}
+
+string Administrateur::getIdentifiant() {
+    return identifiant;
+}
+string Administrateur::getMot_de_passe() {
+    return mot_de_passe;
+}

@@ -1,6 +1,12 @@
 {
     "files.associations": {
         "list": "cpp",
-        "iosfwd": "cpp"
+        "iosfwd": "cpp",
+        "array": "cpp",
+        "initializer_list": "cpp",
+        "utility": "cpp",
+        "random": "cpp",
+        "iostream": "cpp",
+        "ostream": "cpp"
     }
 }

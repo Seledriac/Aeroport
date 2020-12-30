@@ -1,18 +1,20 @@
 #ifndef Passager_H_
-#include <Passager.hpp>
+#include "../Headers/Passager.hpp"
 #endif
 
 #ifndef Reservation_H_
-#include <Reservation.hpp>
+#include "../Headers/Reservation.hpp"
 #endif
 
 #ifndef Vol_H_
-#include <Vol.hpp>
+#include "../Headers/Vol.hpp"
 #endif
 
 #include <iostream>
 
-Passager::Passager(const char* const nom, const char* const prenom, const char* const titre, const char* const num_passeport, int age) {    
+list<Passager*> Passager::passagers;
+
+Passager::Passager(string nom, string prenom, string titre, string num_passeport, int age) {    
     this->nom = nom;
     this->nom = prenom;
     this->titre = titre;

@@ -2,6 +2,7 @@
 #define Date_H_
 
 #include <list>
+#include <iostream>
 
 using namespace std;
 
@@ -12,7 +13,7 @@ class Date {
     public :
         Date(int, int, int, int, int);
         bool operator < (Date &);
-        friend ostream& operator <<(ostream &, Date &);
+        string to_string() const;
         int getAnnee();
         int getMois();
         int getJour();
