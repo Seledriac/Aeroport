@@ -3,9 +3,15 @@
 
 class Reservation;
 
-#include <string>
+#ifndef Destination_H_
+#include "Destination.hpp"
+#endif
+
+#ifndef Date_H_
+#include "Date.hpp"
+#endif
+
 #include <vector>
-#include <list>
 
 using namespace std;
 

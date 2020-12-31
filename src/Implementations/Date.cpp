@@ -76,6 +76,26 @@ string Date::to_string() const {
     return ss.str();
 }
 
+int Date::getAnnee() {
+    return annee;
+}
+
+int Date::getMois() {
+    return mois;
+}
+
+int Date::getJour() {
+    return jour;
+}
+
+int Date::getHeures() {
+    return heures;
+}
+
+int Date::getMinutes() {
+    return minutes;
+}
+
 void Date::setAnnee(int annee) {
     this->annee = annee;
 }
