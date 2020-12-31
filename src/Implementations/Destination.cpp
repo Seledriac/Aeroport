@@ -15,3 +15,11 @@ string Destination::to_string() const {
     ss << ville_depart << " -> " << ville_arrivee;
     return ss.str(); 
 }
+
+string Destination::getVille_arrivee(){
+    return this->ville_arrivee;
+}
+
+string Destination::getVille_depart(){
+    return this->ville_depart;
+}
