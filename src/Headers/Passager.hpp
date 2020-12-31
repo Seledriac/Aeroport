@@ -26,7 +26,7 @@ class Passager {
         bool ReserverVol(int);
         void ConfirmerReservation(int);
         void AnnulerReservation(int);
-        void AfficherListeVols(Destination*, Date*);
+        void AfficherListeVols(Destination* = NULL, Date* = NULL);
         void AfficherListeReservations();
         bool ExistenceVol(int);
         bool ExistenceReservation(int);

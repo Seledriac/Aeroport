@@ -125,7 +125,7 @@ void menuLogicielAdministrateur(Administrateur* admin) {
     bool recommencer = true;
     while(recommencer) {
         char* reponse;
-        if((reponse = (char*)(saisieChamp("\nPage d'administrateur : \n\n1. Ajouter un vol\n2. Afficher la liste des vols\n3. Modifier la date d'un vol\n4. Ajouter un passager\n5. Afficher la liste des passagers\n6. Ajouter une reservation\n7. Afficher une liste des reservations\n8. Se deconnecter\ns. Quitter et sauvegarder\n%. Quitter sans sauvegarder\n\nChoix : ", 'd'))) == NULL)
+        if((reponse = (char*)(saisieChamp("\nPage d'administrateur : \n\n1. Ajouter un vol\n2. Afficher une liste de vols\n3. Modifier la date d'un vol\n4. Ajouter un passager\n5. Afficher la liste des passagers\n6. Ajouter une reservation\n7. Afficher une liste des reservations\n8. Se deconnecter\ns. Quitter et sauvegarder\n%. Quitter sans sauvegarder\n\nChoix : ", 'd'))) == NULL)
             break;
         switch(*reponse) {
             case '1':
@@ -133,7 +133,7 @@ void menuLogicielAdministrateur(Administrateur* admin) {
                 recommencer = false;
                 break;
             case '2':
-                affichageListeVols(admin);
+                choixAffichageVols(NULL, admin);
                 recommencer = false;
                 break;
             case '3':
@@ -369,9 +369,127 @@ void ajoutVol(Administrateur* admin) {
     menuLogicielAdministrateur(admin);
 }
 
-void affichageListeVols(Administrateur* admin) {
-    admin->AfficherListeVols();
-    menuLogicielAdministrateur(admin);
+void choixAffichageVols(Passager* passager = NULL, Administrateur* admin = NULL) {
+    bool recommencer = true;
+    while(recommencer) {
+        char* reponse;
+        if((reponse = (char*)(saisieChamp("\nAu choix : \n\n1. Afficher la liste de toutes les vols\n2. Afficher la liste des vols pour un trajet en particulier\n3. Afficher la liste des vols ayant lieu avant une certaine date\n4. Afficher la liste des vols pour un trajet en particulier ayant lieu avant une certaine date\n5. Afficher un vol en particulier\n\nChoix : ", 'd'))) == NULL)
+            break;
+        switch(*reponse) {
+            case '1':                
+                if(admin != NULL) {
+                    affichageTousVols(NULL, admin);
+                } else {
+                    affichageTousVols(passager);
+                }                
+                recommencer = false;
+                break;
+            case '2':
+                if(admin != NULL) {
+                    affichageVolsTrajet(NULL, admin);
+                } else {
+                    affichageVolsTrajet(passager);
+                }
+                recommencer = false;
+                break;
+            case '3':
+                if(admin != NULL) {
+                    affichageVolsDate(NULL, admin);
+                } else {
+                    affichageVolsDate(passager);
+                }
+                recommencer = false;
+                break;
+            case '4':
+                if(admin != NULL) {
+                    affichageVolsCustom(NULL, admin);
+                } else {
+                    affichageVolsCustom(passager);
+                }
+                recommencer = false;
+                break;
+            case '5':
+                if(admin != NULL) {
+                    affichageVol(NULL, admin);
+                } else {
+                    affichageVol(passager);
+                }
+                recommencer = false;
+                break;
+            default:
+                cout << "\nErreur, veuillez saisir un chiffre-commande adéquat\n";
+                break;
+        }
+    }
+    if(admin != NULL) {
+        menuLogicielAdministrateur(admin);
+    } else {
+        menuLogicielPassager(passager);
+    }
+}
+
+void affichageTousVols(Passager* passager = NULL, Administrateur* admin = NULL) {
+    if(admin != NULL) {
+        admin->AfficherListeVols();
+    } else {
+        passager->AfficherListeVols();
+    }
+}
+
+void affichageVolsTrajet(Passager* passager = NULL, Administrateur* admin = NULL) {
+    Destination* dest;
+    if((dest = saisieDestination()) == NULL) {
+        return;
+    }
+    if(admin != NULL) {
+        admin->AfficherListeVols(dest, NULL);
+    } else {
+        passager->AfficherListeVols(dest, NULL);
+    }
+}
+
+void affichageVolsDate(Passager* passager = NULL, Administrateur* admin = NULL) {
+    Date* date;
+    if((date = saisieDate()) == NULL) {
+        return;
+    }
+    if(admin != NULL) {
+        admin->AfficherListeVols(NULL, date);
+    } else {
+        passager->AfficherListeVols(NULL, date);
+    }
+}
+
+void affichageVolsCustom(Passager* passager = NULL, Administrateur* admin = NULL) {
+    Destination* dest;
+    if((dest = saisieDestination()) == NULL) {
+        return;
+    }
+    Date* date;
+    if((date = saisieDate()) == NULL) {
+        return;
+    }
+    if(admin != NULL) {
+        admin->AfficherListeVols(dest, date);
+    } else {
+        passager->AfficherListeVols(dest, date);
+    }
+}
+
+void affichageVol(Passager* passager = NULL, Administrateur* admin = NULL) {
+    int* num_vol;
+    if((num_vol = (int*)(saisieChamp("\nVeuillez saisir le numero du vol : ", 'e'))) == NULL) {
+        return;
+    }
+    if(admin != NULL) {
+        if(!(admin->ExistenceVol(*num_vol))) {
+            cout << "\nLe numero saisi ne correspond a aucun vol\n";
+        } 
+    } else {
+        if(!(passager->ExistenceVol(*num_vol))) {
+            cout << "\nLe numero saisi ne correspond a aucun vol\n";
+        } 
+    }
 }
 
 void modificationDateVol(Administrateur* admin) {
@@ -476,7 +594,7 @@ void choixAffichageReservations(Administrateur* admin) {
     bool recommencer = true;
     while(recommencer) {
         char* reponse;
-        if((reponse = (char*)(saisieChamp("\nAu choix : \n\n1. Afficher la liste de toutes les reservations tous vols et tous passagers confondus\n2. Afficher la liste des reservations pour un vol particulier\n3. Afficher la liste des reservations d'un passager\n\nChoix : ", 'd'))) == NULL)
+        if((reponse = (char*)(saisieChamp("\nAu choix : \n\n1. Afficher la liste de toutes les reservations tous vols et tous passagers confondus\n2. Afficher la liste des reservations pour un vol particulier\n3. Afficher la liste des reservations d'un passager\n4. Afficher une reservation en particulier\n\nChoix : ", 'd'))) == NULL)
             break;
         switch(*reponse) {
             case '1':
@@ -489,6 +607,10 @@ void choixAffichageReservations(Administrateur* admin) {
                 break;
             case '3':
                 affichageReservationsPassager(admin);
+                recommencer = false;
+                break;
+            case '4':
+                affichageReservation(NULL, admin);
                 recommencer = false;
                 break;
             default:
@@ -529,6 +651,22 @@ void affichageReservationsPassager(Administrateur* admin) {
         return;
     }
     Passager::getPassager(*num_passeport)->AfficherListeReservations();
+}
+
+void affichageReservation(Passager* passager = NULL, Administrateur* admin = NULL) {
+    int* num_reservation;
+    if((num_reservation = (int*)(saisieChamp("\nVeuillez saisir le numero de la reservation : ", 'e'))) == NULL) {
+        return;
+    }
+    if(admin != NULL) {
+        if(!(admin->ExistenceReservation(*num_reservation))) {
+            cout << "\nLe numero saisi ne correspond a aucune reservation\n";
+        }
+    } else {
+        if(!(passager->ExistenceReservation(*num_reservation))) {
+            cout << "\nLe numero saisi ne correspond a aucune de vos reservations\n";
+        } 
+    }
 }
 
 void deconnexion() {
@@ -591,30 +729,34 @@ void menuLogicielPassager(Passager* passager) {
     bool recommencer = true;
     while(recommencer) {
         char* reponse;
-        if((reponse = (char*)(saisieChamp("Veuillez choisir l'une des actions suivantes a effectuer\n\n1. Afficher la liste des vols\n2. Reserver un vol\n3. Afficher la liste de mes reservations\n4. Confirmer une reservation\n5. Annuler une reservation\n6. Se deconnecter\ns. Quitter et sauvegarder\n%. Quitter sans sauvegarder\n\n", 'd'))) == NULL)
+        if((reponse = (char*)(saisieChamp("Veuillez choisir l'une des actions suivantes a effectuer\n\n1. Afficher une liste des vols\n2. Reserver un vol\n3. Afficher une de mes reservations\n4. Afficher la liste de mes reservations\n5. Confirmer une reservation\n6. Annuler une reservation\n7. Se deconnecter\ns. Quitter et sauvegarder\n%. Quitter sans sauvegarder\n\n", 'd'))) == NULL)
             break;
         switch(*reponse) {
             case '1':
-                affichageListeVols(passager);
+                choixAffichageVols(passager);
                 recommencer = false;
                 break;
             case '2':
                 reservationVol(passager);
                 recommencer = false;
                 break;
-            case '3':
-                affichageListeReservationsPassager(passager);
+            case '3' :
+                affichageReservation(passager);
                 recommencer = false;
                 break;
             case '4':
-                confirmerReservation(passager);
+                affichageListeReservationsPassager(passager);
                 recommencer = false;
                 break;
             case '5':
-                annulerReservation(passager);
+                confirmerReservation(passager);
                 recommencer = false;
                 break;
             case '6':
+                annulerReservation(passager);
+                recommencer = false;
+                break;
+            case '7':
                 deconnexion();
                 recommencer = false;
                 break;

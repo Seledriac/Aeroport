@@ -56,11 +56,26 @@ void Passager::AnnulerReservation(int num_reservation) {
     Reservation::getReservation(num_reservation)->Annuler();
 }
 
-void Passager::AfficherListeVols() {
+void Passager::AfficherListeVols(Destination* dest, Date* date) {
     cout << endl;
     list<Vol*> vols = Vol::getVols();
     for(list<Vol*>::const_iterator it = vols.begin(); it != vols.end(); it++) {
-        (*it)->afficherVol();
+        if((dest != NULL 
+            && date != NULL
+            && (*it)->getDate() < date
+            && (*it)->getDestination()->getVille_depart() == dest->getVille_depart() 
+            && (*it)->getDestination()->getVille_arrivee() == dest->getVille_arrivee())
+            || (dest != NULL
+            && date == NULL
+            && (*it)->getDestination()->getVille_depart() == dest->getVille_depart() 
+            && (*it)->getDestination()->getVille_arrivee() == dest->getVille_arrivee())
+            || (dest == NULL
+            && date != NULL
+            && (*it)->getDate() < date)
+            || (dest == NULL 
+            && date == NULL)){
+            (*it)->afficherVol();
+        }
     }
     cout << endl;
 }

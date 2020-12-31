@@ -34,28 +34,26 @@ void Administrateur::ajouterPassager(string nom, string prenom, string titre, st
     Passager::nouveauPassager(nom, prenom, titre, num_passeport, mot_de_passe, age);
 }
 
-void Administrateur::AfficherListeVols(Destination* dest = NULL, Date* date = NULL){
+void Administrateur::AfficherListeVols(Destination* dest, Date* date){
     cout << endl;
     list<Vol*> vols = Vol::getVols();
     for(list<Vol*>::const_iterator it = vols.begin(); it != vols.end(); it++) {
-        if(dest == NULL && date == NULL) {
-            (*it)->afficherVol();
-        } 
-        if(dest != NULL
+        if((dest != NULL 
+            && date != NULL
+            && (*it)->getDate() < date
+            && (*it)->getDestination()->getVille_depart() == dest->getVille_depart() 
+            && (*it)->getDestination()->getVille_arrivee() == dest->getVille_arrivee())
+            || (dest != NULL
             && date == NULL
             && (*it)->getDestination()->getVille_depart() == dest->getVille_depart() 
-            && (*it)->getDestination()->getVille_arrivee() == dest->getVille_arrivee()) {
-            
-        } else if(dest == NULL
+            && (*it)->getDestination()->getVille_arrivee() == dest->getVille_arrivee())
+            || (dest == NULL
             && date != NULL
-            && (*it)->getDate()->getAnnee() == date->getAnnee() 
-            && (*it)->getDate()->getMois() == date->getMois() 
-            && (*it)->getDate()->getJour() == date->getJour() 
-            && (*it)->getDate()->getHeures() == date->getHeures()
-            && (*it)->getDate()->getMinutes() == date->getMinutes() {            
-        } else {
-            ;
-        }    
+            && (*it)->getDate() < date)
+            || (dest == NULL 
+            && date == NULL)){
+            (*it)->afficherVol();
+        }
     }
     cout << endl;
 }
@@ -97,6 +95,10 @@ bool Administrateur::ExistenceVol(int num_vol){
         }            
     }
     return vol_existe;
+}
+
+bool Administrateur::ExistenceReservation(int num_reservation){
+    return Reservation::getReservation(num_reservation) != NULL;
 }
 
 bool Administrateur::ExistencePassager(string num_passeport){

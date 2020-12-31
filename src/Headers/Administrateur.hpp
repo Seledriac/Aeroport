@@ -30,11 +30,12 @@ class Administrateur {
         void ajouterVol(int, int, Destination, Date);
         void ajouterPassager(string, string, string, string, string, int);
         bool ajouterReservation(Passager*, Vol*);
-        void AfficherListeVols(Destination*, Date*);
+        void AfficherListeVols(Destination* = NULL, Date* = NULL);
         void AfficherListePassagers();
         void AfficherListeReservations(int);
         void ModifierDateVol(int, Date &);
         bool ExistenceVol(int);
+        bool ExistenceReservation(int);
         bool ExistencePassager(string);
         static void chargerAdministrateurs();
         string getIdentifiant();
