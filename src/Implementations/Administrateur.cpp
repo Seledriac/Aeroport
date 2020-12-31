@@ -100,9 +100,9 @@ void Administrateur::chargerAdministrateurs() {
     string identifiant = "tom";
     string mdp = "pass";
     administrateurs.push_back(new Administrateur(identifiant, mdp));
-    identifiant = "antoine";
-    mdp = "pass";
-    administrateurs.push_back(new Administrateur(identifiant, mdp));
+    string identifiant_2 = "antoine";
+    string mdp_2 = "pass";
+    administrateurs.push_back(new Administrateur(identifiant_2, mdp_2));
     // connexion bdd (tous les administrateurs sont chargés vers la liste "administrateurs")
 }
 

@@ -16,7 +16,7 @@ list<Passager*> Passager::passagers;
 
 Passager::Passager(string nom, string prenom, string titre, string num_passeport, string mot_de_passe, int age) {    
     this->nom = nom;
-    this->nom = prenom;
+    this->prenom = prenom;
     this->titre = titre;
     this->num_passeport = num_passeport;
     this->mot_de_passe = mot_de_passe;
@@ -126,7 +126,7 @@ string Passager::getNom() {
 }
 
 void Passager::afficherPassager() {
-    cout << num_passeport << " => " << this->prenom << " " << this->nom << " : " << this->titre << ", " << this->age << " ans" << endl;
+    cout << num_passeport << " => " << prenom << " " << nom << " : " << titre << ", " << age << " ans" << endl;
 }
 
 void Passager::chargerPassagers() {

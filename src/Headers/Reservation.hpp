@@ -29,6 +29,7 @@ class Reservation {
         int getNum_reservation();
         int getNum_vol();
         static void chargerReservations();
+        static bool reservationExistante(string, int);
 }; 
 
 #endif

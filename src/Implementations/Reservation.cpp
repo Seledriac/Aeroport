@@ -46,7 +46,7 @@ list<Reservation*> Reservation::getReservations() {
 }
 
 void Reservation::afficherReservation() {
-    cout << num_reservation << " => Passager : " << num_passeport << "; Vol : " << num_vol << endl;
+    cout << num_reservation << " => Passager : " << num_passeport << "; Vol : " << num_vol << "; Confirmation : " << confirmation << endl;
 }
 
 string Reservation::getNum_passeport() {
@@ -64,3 +64,14 @@ int Reservation::getNum_vol() {
 void Reservation::chargerReservations() {
     
 }
+
+bool Reservation::reservationExistante(string num_passeport, int num_vol) {
+    bool existe =false;
+    for(list<Reservation*>::const_iterator it = reservations.begin(); it != reservations.end(); it++) {
+        if((*it)->num_passeport == num_passeport && (*it)->num_vol == num_vol) {
+            existe = true;
+        }  
+    }
+    return existe;
+}
+
