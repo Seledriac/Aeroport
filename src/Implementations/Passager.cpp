@@ -56,7 +56,7 @@ void Passager::AnnulerReservation(int num_reservation) {
     Reservation::getReservation(num_reservation)->Annuler();
 }
 
-void Passager::AfficherListeVols() {
+void Passager::AfficherListeVols(Destination* destination, Date* date) {
     cout << endl;
     list<Vol*> vols = Vol::getVols();
     for(list<Vol*>::const_iterator it = vols.begin(); it != vols.end(); it++) {
