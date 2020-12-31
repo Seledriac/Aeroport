@@ -1,5 +1,5 @@
 // Commande de compilation (à exécuter depuis la racine du projet):
-// g++ ./src/main.cpp ./src/Implementations/*.cpp
+// g++ ./src/main.cpp ./src/Implementations/*.cpp -std=c++17
 
 #ifndef Administrateur_H_
 #include "Headers/Administrateur.hpp"
@@ -52,7 +52,7 @@ void affichageToutesReservations(Administrateur*);
 void affichageReservationsVol(Administrateur*);
 void affichageReservationsPassager(Administrateur*);
 void affichageReservation(Passager* = NULL, Administrateur* = NULL);
-void deconnexion();
+void deconnexion(Passager* = NULL, Administrateur* = NULL);
 void quitter(bool);
 void pageConnexionPassager();
 void connexionPassager();
@@ -63,13 +63,13 @@ void affichageListeReservationsPassager(Passager*);
 void confirmerReservation(Passager*);
 void annulerReservation(Passager*);
 
-void menuPrincipal() {
+void menuPrincipal() {  
     cout << "\nBienvenue dans le logiciel de l'Aeroport Paris CDG\n";
-    bool recommencer = true;    
+    bool recommencer = true;
     while(recommencer) {
-        char* saisie;
+        char* saisie = new char;
         if((saisie = saisieChamp<char>("\nEtes-vous administrateur ? (o/n) : ", 'a')) == NULL)
-            break;
+            continue;
         switch(*saisie) {
             case 'o':
                 pageConnexionAdministrateur();
@@ -89,9 +89,9 @@ void menuPrincipal() {
 void pageConnexionAdministrateur() {
     bool recommencer = true;
     while(recommencer) {
-        char* saisie;
+        char* saisie = new char;
         if((saisie = saisieChamp<char>("\n\nPage de connexion des administrateurs : \n\n1. Se connecter\n2. Retour au menu principal\n\nChoix : ", 'a')) == NULL)
-            break;
+            continue;
         switch(*saisie) {
             case '1':
                 connexionAdministrateur();
@@ -133,9 +133,9 @@ void connexionAdministrateur() {
 void menuLogicielAdministrateur(Administrateur* admin) {
     bool recommencer = true;
     while(recommencer) {
-        char* saisie;
+        char* saisie = new char;
         if((saisie = saisieChamp<char>("\nPage d'administrateur : \n\n1. Ajouter un vol\n2. Afficher une liste de vols\n3. Modifier la date d'un vol\n4. Ajouter un passager\n5. Afficher la liste des passagers\n6. Ajouter une reservation\n7. Afficher une liste des reservations\n8. Se deconnecter\ns. Quitter et sauvegarder\n%. Quitter sans sauvegarder\n\nChoix : ", 'd')) == NULL)
-            break;
+            continue;
         switch(*saisie) {
             case '1':
                 ajoutVol(admin);
@@ -166,7 +166,7 @@ void menuLogicielAdministrateur(Administrateur* admin) {
                 recommencer = false;
                 break;
             case '8':
-                deconnexion();
+                deconnexion(NULL, admin);
                 recommencer = false;
                 break;
             case 's':
@@ -187,9 +187,9 @@ void menuLogicielAdministrateur(Administrateur* admin) {
 template <typename T>
 T* saisieChamp(string msg, char flag) {    
     cout << msg;
-    T* saisie;
+    T* saisie = new T;
     cin >> *saisie;
-    switch(flag) {        
+    switch(flag) {
         case 'a':
             {                
                 if(cin.fail()) {
@@ -199,7 +199,6 @@ T* saisieChamp(string msg, char flag) {
                 } else {
                     return saisie;
                 }
-                break;
             }
         case 'b':
             {
@@ -210,7 +209,6 @@ T* saisieChamp(string msg, char flag) {
                 } else {
                     return saisie;
                 }
-                break;
             }
         case 'c':
             {
@@ -221,7 +219,6 @@ T* saisieChamp(string msg, char flag) {
                 } else {
                     return saisie;
                 }
-                break;
             }
         case 'd':
             {
@@ -232,7 +229,6 @@ T* saisieChamp(string msg, char flag) {
                 } else {
                     return saisie;
                 }
-                break;
             }
         case 'e':
             {
@@ -243,7 +239,6 @@ T* saisieChamp(string msg, char flag) {
                 } else {
                     return saisie;
                 }
-                break;
             }
         case 'f':
             {
@@ -259,7 +254,6 @@ T* saisieChamp(string msg, char flag) {
                 } else {
                     return saisie;
                 }
-                break;
             }
         case 'g':
             {
@@ -270,8 +264,11 @@ T* saisieChamp(string msg, char flag) {
                 } else {
                     return saisie;
                 }
-                break;
             }
+        default:
+        {
+            return NULL;
+        }
     }
 }
 
@@ -384,16 +381,16 @@ void ajoutVol(Administrateur* admin) {
 void choixAffichageVols(Passager* passager, Administrateur* admin) {
     bool recommencer = true;
     while(recommencer) {
-        char* saisie;
-        if((saisie = saisieChamp<char>("\nAu choix : \n\n1. Afficher la liste de toutes les vols\n2. Afficher la liste des vols pour un trajet en particulier\n3. Afficher la liste des vols ayant lieu avant une certaine date\n4. Afficher la liste des vols pour un trajet en particulier ayant lieu avant une certaine date\n5. Afficher un vol en particulier\n\nChoix : ", 'd')) == NULL)
-            break;
+        char* saisie = new char;
+        if((saisie = saisieChamp<char>("\nAu choix : \n\n1. Afficher la liste de tous les vols\n2. Afficher la liste des vols pour un trajet en particulier\n3. Afficher la liste des vols ayant lieu avant une certaine date\n4. Afficher la liste des vols pour un trajet en particulier ayant lieu avant une certaine date\n5. Afficher un vol en particulier\n\nChoix : ", 'd')) == NULL)
+            continue;
         switch(*saisie) {
             case '1':                
                 if(admin != NULL) {
                     affichageTousVols(NULL, admin);
                 } else {
                     affichageTousVols(passager);
-                }                
+                }
                 recommencer = false;
                 break;
             case '2':
@@ -489,23 +486,29 @@ void affichageVolsCustom(Passager* passager, Administrateur* admin) {
 }
 
 void affichageVol(Passager* passager, Administrateur* admin) {
-    int* num_vol;
+    int* num_vol = new int;
     if((num_vol = saisieChamp<int>("\nVeuillez saisir le numero du vol : ", 'e')) == NULL) {
         return;
     }
     if(admin != NULL) {
         if(!(admin->ExistenceVol(*num_vol))) {
             cout << "\nLe numero saisi ne correspond a aucun vol\n";
-        } 
+        } else {
+            cout << endl;
+            Vol::getVol(*num_vol)->afficherVol();
+        }
     } else {
         if(!(passager->ExistenceVol(*num_vol))) {
             cout << "\nLe numero saisi ne correspond a aucun vol\n";
-        } 
+        } else {
+            cout << endl;
+            Vol::getVol(*num_vol)->afficherVol();
+        }
     }
 }
 
 void modificationDateVol(Administrateur* admin) {
-    int* num_vol;
+    int* num_vol = new int;
     if((num_vol = saisieChamp<int>("\nVeuillez saisir le numero du vol choisi : ", 'e')) == NULL) {
         menuLogicielAdministrateur(admin);
         return;
@@ -528,32 +531,32 @@ void modificationDateVol(Administrateur* admin) {
 }
 
 void ajoutPassager(Administrateur* admin) {
-    string* num_passeport;
+    string* num_passeport = new string;
     if((num_passeport = saisieChamp<string>("\nVeuillez saisir le numero de passeport du passager a ajouter : ", 'f')) == NULL) {
         menuLogicielAdministrateur(admin);
         return;
     }
-    string* mot_de_passe;
+    string* mot_de_passe = new string;
     if((mot_de_passe = saisieChamp<string>("Veuillez saisir le mot de passe du passager a ajouter : ", 'c')) == NULL) {
         menuLogicielAdministrateur(admin);
         return;
     }
-    string* prenom;
+    string* prenom = new string;
     if((prenom = saisieChamp<string>("\nVeuillez saisir le prenom du passager : ", 'c')) == NULL) {
         menuLogicielAdministrateur(admin);
         return;
     }
-    string* nom;
+    string* nom = new string;
     if((nom = saisieChamp<string>("\nVeuillez saisir le nom du passager : ", 'c')) == NULL) {
         menuLogicielAdministrateur(admin);
         return;
     }
-    string* titre;
+    string* titre = new string;
     if((titre = saisieChamp<string>("\nVeuillez saisir le titre du passager : ", 'c')) == NULL) {
         menuLogicielAdministrateur(admin);
         return;
     }
-    int* age;
+    int* age = new int;
     if((age = saisieChamp<int>("\nVeuillez saisir l'age du passager : ", 'g')) == NULL) {
         menuLogicielAdministrateur(admin);
         return;
@@ -569,7 +572,7 @@ void affichageListePassagers(Administrateur* admin) {
 }
 
 void ajouterReservation(Administrateur* admin) {
-    string* num_passeport;
+    string* num_passeport = new string;
     if((num_passeport = saisieChamp<string>("\nVeuillez saisir le numero de passeport du passager : ", 'f')) == NULL) {
         menuLogicielAdministrateur(admin);
         return;
@@ -580,7 +583,7 @@ void ajouterReservation(Administrateur* admin) {
         menuLogicielAdministrateur(admin);
         return;
     }
-    int* num_vol;
+    int* num_vol = new int;
     if((num_vol = saisieChamp<int>("\nVeuillez saisir le numero du vol : ", 'e')) == NULL) {
         menuLogicielAdministrateur(admin);
         return;
@@ -605,9 +608,9 @@ void ajouterReservation(Administrateur* admin) {
 void choixAffichageReservations(Administrateur* admin) {
     bool recommencer = true;
     while(recommencer) {
-        char* saisie;
+        char* saisie = new char;
         if((saisie = saisieChamp<char>("\nAu choix : \n\n1. Afficher la liste de toutes les reservations tous vols et tous passagers confondus\n2. Afficher la liste des reservations pour un vol particulier\n3. Afficher la liste des reservations d'un passager\n4. Afficher une reservation en particulier\n\nChoix : ", 'd')) == NULL)
-            break;
+            continue;
         switch(*saisie) {
             case '1':
                 affichageToutesReservations(admin);
@@ -638,7 +641,7 @@ void affichageToutesReservations(Administrateur* admin) {
 }
 
 void affichageReservationsVol(Administrateur* admin) {
-    int* num_vol;
+    int* num_vol = new int;
     if((num_vol = saisieChamp<int>("\nVeuillez saisir le numero du vol choisi : ", 'e')) == NULL) {
         menuLogicielAdministrateur(admin);
         return;
@@ -652,7 +655,7 @@ void affichageReservationsVol(Administrateur* admin) {
 }
 
 void affichageReservationsPassager(Administrateur* admin) {
-    string* num_passeport;
+    string* num_passeport = new string;
     if((num_passeport = saisieChamp<string>("\nVeuillez saisir le numero de passeport du passager choisi : ", 'f')) == NULL) {
         menuLogicielAdministrateur(admin);
         return;
@@ -666,22 +669,34 @@ void affichageReservationsPassager(Administrateur* admin) {
 }
 
 void affichageReservation(Passager* passager, Administrateur* admin) {
-    int* num_reservation;
+    int* num_reservation = new int;
     if((num_reservation = saisieChamp<int>("\nVeuillez saisir le numero de la reservation : ", 'e')) == NULL) {
         return;
     }
     if(admin != NULL) {
         if(!(admin->ExistenceReservation(*num_reservation))) {
             cout << "\nLe numero saisi ne correspond a aucune reservation\n";
+        } else {
+            cout << endl;
+            Reservation::getReservation(*num_reservation)->afficherReservation();
         }
     } else {
         if(!(passager->ExistenceReservation(*num_reservation))) {
             cout << "\nLe numero saisi ne correspond a aucune de vos reservations\n";
-        } 
+        } else {
+            cout << endl;
+            Reservation::getReservation(*num_reservation)->afficherReservation();
+        }
+        menuLogicielPassager(passager);
     }
 }
 
-void deconnexion() {
+void deconnexion(Passager* passager, Administrateur* admin) {
+    if(admin != NULL) {
+        admin = NULL;
+    } else {
+        passager = NULL;
+    }
     cout << "\nDeconnexion effectuee" << endl;
     menuPrincipal();
 }
@@ -696,9 +711,9 @@ void quitter(bool sauvegarder) {
 void pageConnexionPassager() {
     bool recommencer = true;
     while(recommencer) {
-        char* saisie;
+        char* saisie = new char;
         if((saisie = saisieChamp<char>("\n\nPage de connexion des passagers : \n\n1. Se connecter\n2. Retour au menu principal\n\nChoix : ", 'd')) == NULL)
-            break;
+            continue;
         switch(*saisie) {
             case '1':
                 connexionPassager();
@@ -740,9 +755,9 @@ void menuLogicielPassager(Passager* passager) {
     cout << "\nVous etes connecte en tant que " << passager->getPrenom() << " " << passager->getNom() << endl;
     bool recommencer = true;
     while(recommencer) {
-        char* saisie;
-        if((saisie = saisieChamp<char>("Veuillez choisir l'une des actions suivantes a effectuer\n\n1. Afficher une liste des vols\n2. Reserver un vol\n3. Afficher une de mes reservations\n4. Afficher la liste de mes reservations\n5. Confirmer une reservation\n6. Annuler une reservation\n7. Se deconnecter\ns. Quitter et sauvegarder\n%. Quitter sans sauvegarder\n\n", 'd')) == NULL)
-            break;
+        char* saisie = new char;
+        if((saisie = saisieChamp<char>("Veuillez choisir l'une des actions suivantes a effectuer\n\n1. Afficher une liste des vols\n2. Reserver un vol\n3. Afficher une de mes reservations\n4. Afficher la liste de mes reservations\n5. Confirmer une reservation\n6. Annuler une reservation\n7. Se deconnecter\ns. Quitter et sauvegarder\n%. Quitter sans sauvegarder\n\nChoix : ", 'd')) == NULL)
+            continue;
         switch(*saisie) {
             case '1':
                 choixAffichageVols(passager);
@@ -769,7 +784,7 @@ void menuLogicielPassager(Passager* passager) {
                 recommencer = false;
                 break;
             case '7':
-                deconnexion();
+                deconnexion(passager);
                 recommencer = false;
                 break;
             case 's':
@@ -793,7 +808,7 @@ void affichageListeVols(Passager* passager) {
 }
 
 void reservationVol(Passager* passager) {
-    int* num_vol;
+    int* num_vol = new int;
     if((num_vol = saisieChamp<int>("\nVeuillez saisir le numero du vol choisi : ", 'e')) == NULL) {
         menuLogicielPassager(passager);
         return;
@@ -821,7 +836,7 @@ void affichageListeReservationsPassager(Passager* passager) {
 }
 
 void confirmerReservation(Passager* passager) {
-    int* num_reservation;
+    int* num_reservation = new int;
     if((num_reservation = saisieChamp<int>("\nVeuillez saisir le numero de la reservation a confirmer : ", 'e')) == NULL) {
         menuLogicielPassager(passager);
         return;
@@ -838,7 +853,7 @@ void confirmerReservation(Passager* passager) {
 }
 
 void annulerReservation(Passager* passager) {
-    int* num_reservation;
+    int* num_reservation = new int;
     if((num_reservation = saisieChamp<int>("\nVeuillez saisir le numero de la reservation a annuler : ", 'e')) == NULL) {
         menuLogicielPassager(passager);
         return;

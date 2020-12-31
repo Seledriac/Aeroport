@@ -51,7 +51,7 @@ void Administrateur::AfficherListeVols(Destination* dest, Date* date){
             && date != NULL
             && (*it)->getDate() < date)
             || (dest == NULL 
-            && date == NULL)){
+            && date == NULL)) {
             (*it)->afficherVol();
         }
     }
@@ -113,15 +113,14 @@ bool Administrateur::ExistencePassager(string num_passeport){
     return passager_existe;
 }
 
-
 void Administrateur::chargerAdministrateurs() {
     // tests
     string identifiant = "tom";
     string mdp = "pass";
     administrateurs.push_back(new Administrateur(identifiant, mdp));
-    string identifiant_2 = "antoine";
-    string mdp_2 = "pass";
-    administrateurs.push_back(new Administrateur(identifiant_2, mdp_2));
+    identifiant = "antoine";
+    mdp = "pass";
+    administrateurs.push_back(new Administrateur(identifiant, mdp));
     // connexion bdd (tous les administrateurs sont chargés vers la liste "administrateurs")
 }
 

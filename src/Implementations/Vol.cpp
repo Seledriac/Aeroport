@@ -10,8 +10,8 @@ Vol::Vol(int nb_places, int prix, Destination dest, Date date) {
     num_vol = vols.size() + 1;
     this->nb_places = nb_places;
     this->prix = prix;
-    this->dest = &dest;    
-    this->date = &date;
+    this->dest = new Destination(dest.getVille_depart(), dest.getVille_arrivee());
+    this->date = new Date(date.getAnnee(), date.getMois(), date.getJour(), date.getHeures(), date.getMinutes());
     vols.push_back(this);
 }
 

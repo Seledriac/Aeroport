@@ -67,9 +67,9 @@ string Date::to_string() const {
         default:
             break;
     }
-    string mins = "";
+    string mins = std::to_string(minutes);;
     if(minutes < 10) {
-        mins = "0" + std::to_string(minutes);
+        mins = "0" + mins;
     }
     stringstream ss;
     ss << jour << " " << mois_converti << " " << annee << ", " << heures << ":" << mins;
