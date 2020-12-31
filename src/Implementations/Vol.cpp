@@ -6,12 +6,12 @@
 
 list<Vol*> Vol::vols;
 
-Vol::Vol(int nb_places, int prix, string ville_depart, string ville_arrivee, int annee, int mois, int jour, int heures, int minutes) {
+Vol::Vol(int nb_places, int prix, Destination dest, Date date) {
     num_vol = vols.size() + 1;
     this->nb_places = nb_places;
     this->prix = prix;
-    this->dest = new Destination(ville_depart, ville_arrivee);    
-    this->date = new Date(annee, mois, jour, heures, minutes);
+    this->dest = &dest;    
+    this->date = &date;
     vols.push_back(this);
 }
 
@@ -61,12 +61,12 @@ Date* Vol::getDate() {
     return date;
 }
 
-void Vol::setDate(int annee, int mois, int jour, int heures, int minutes) {
-    date->setAnnee(annee);
-    date->setMois(mois);
-    date->setJour(jour);
-    date->setHeures(heures);
-    date->setMinutes(minutes);
+void Vol::setDate(Date &date) {
+    this->date->setAnnee(date.getAnnee());
+    this->date->setMois(date.getMois());
+    this->date->setJour(date.getJour());
+    this->date->setHeures(date.getHeures());
+    this->date->setMinutes(date.getMinutes());
 }
 
 void Vol::afficherVol() {

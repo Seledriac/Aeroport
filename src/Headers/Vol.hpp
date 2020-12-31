@@ -22,7 +22,7 @@ class Vol {
     Date* date;
 
     public :
-        Vol(int, int, string, string, int, int, int, int, int);
+        Vol(int, int, Destination, Date);
         ~Vol();
         static Vol* getVol(int);
         static list<Vol*> getVols();
@@ -32,7 +32,7 @@ class Vol {
         int getPrix();
         Destination* getDestination();
         Date* getDate();
-        void setDate(int, int, int, int, int);
+        void setDate(Date &);
         void afficherVol();
         static void chargerVols();     
 };

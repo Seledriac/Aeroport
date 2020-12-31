@@ -1,5 +1,5 @@
 // Commande de compilation (à exécuter depuis la racine du projet):
-// g++ ./src/main.cpp ./src/Implementations/*.cpp 
+// g++ ./src/main.cpp ./src/Implementations/*.cpp
 
 #ifndef Administrateur_H_
 #include "Headers/Administrateur.hpp"
@@ -57,16 +57,11 @@ void annulerReservation(Passager*);
 void menuPrincipal() {
     cout << "\nBienvenue dans le logiciel de l'Aeroport Paris CDG\n";
     bool recommencer = true;    
-    while(recommencer) {        
-        cout << "\nEtes-vous administrateur ? (o/n) : ";
-        char reponse;
-        cin >> reponse;
-        if(cin.fail()) {
-            cin.clear();
-            cout << "\nErreur, veuillez saisir o (pour oui) ou n (pour non)\n";
+    while(recommencer) {
+        char* reponse;
+        if((reponse = (char*)(saisieChamp("\nEtes-vous administrateur ? (o/n) : ", 'a'))) == NULL)
             break;
-        }
-        switch(reponse) {
+        switch(*reponse) {
             case 'o':
                 pageConnexionAdministrateur();
                 recommencer = false;
@@ -84,19 +79,11 @@ void menuPrincipal() {
 
 void pageConnexionAdministrateur() {
     bool recommencer = true;
-    while(recommencer) {    
-        cout << "\n\nPage de connexion des administrateurs : \n";
-        cout << "\n1. Se connecter";
-        cout << "\n2. Retour au menu principal\n\n";
-        cout << "Choix : ";
-        char reponse;
-        cin >> reponse;
-        if(cin.fail()) {
-            cin.clear();
-            cout << "\nErreur, veuillez saisir 1 (pour vous connecter) ou 2 (pour retourner au menu principal)\n";
+    while(recommencer) {
+        char* reponse;
+        if((reponse = (char*)(saisieChamp("\n\nPage de connexion des administrateurs : \n\n1. Se connecter\n2. Retour au menu principal\n\nChoix : ", 'a'))) == NULL)
             break;
-        }
-        switch(reponse) {
+        switch(*reponse) {
             case '1':
                 connexionAdministrateur();
                 recommencer = false;
@@ -113,25 +100,17 @@ void pageConnexionAdministrateur() {
 }
 
 void connexionAdministrateur() {
-    cout << "\nVeuillez saisir votre identifiant : ";
-    string identifiant;
-    cin >> identifiant;
-    if(cin.fail()) {
-        cin.clear();
-        cout << "\nErreur, saisie invalide\n";
+    string* identifiant;
+    if((identifiant = (string*)(saisieChamp("\nVeuillez saisir votre identifiant : ", 'c'))) == NULL) {
         pageConnexionAdministrateur();
         return;
     }
-    cout << "Veuillez saisir votre mot de passe : ";
-    string mdp;
-    cin >> mdp;
-    if(cin.fail()) {
-        cin.clear();
-        cout << "\nErreur, saisie invalide\n";
+    string* mdp;
+    if((mdp = (string*)(saisieChamp("Veuillez saisir votre mot de passe : ", 'c'))) == NULL) {
         pageConnexionAdministrateur();
         return;
     }
-    Administrateur* admin = Administrateur::getAdministrateur(identifiant, mdp);
+    Administrateur* admin = Administrateur::getAdministrateur(*identifiant, *mdp);
     if(admin != NULL) {
         cout << "\nIdentification reussie\n";
         menuLogicielAdministrateur(admin);
@@ -145,26 +124,10 @@ void connexionAdministrateur() {
 void menuLogicielAdministrateur(Administrateur* admin) {
     bool recommencer = true;
     while(recommencer) {
-        cout << "\nPage d'administrateur : \n";
-        cout << "\n1. Ajouter un vol";
-        cout << "\n2. Afficher la liste des vols";
-        cout << "\n3. Modifier la date d'un vol";
-        cout << "\n4. Ajouter un passager";
-        cout << "\n5. Afficher la liste des passagers";
-        cout << "\n6. Ajouter une reservation";
-        cout << "\n7. Afficher une liste des reservations";        
-        cout << "\n8. Se deconnecter";
-        cout << "\ns. Quitter et sauvegarder";
-        cout << "\n%. Quitter sans sauvegarder\n\n";
-        cout << "Choix : ";
-        char reponse;
-        cin >> reponse;
-        if(cin.fail()) {
-            cin.clear();
-            cout << "\nErreur, veuillez saisir un chiffre-commande adéquat\n";
+        char* reponse;
+        if((reponse = (char*)(saisieChamp("\nPage d'administrateur : \n\n1. Ajouter un vol\n2. Afficher la liste des vols\n3. Modifier la date d'un vol\n4. Ajouter un passager\n5. Afficher la liste des passagers\n6. Ajouter une reservation\n7. Afficher une liste des reservations\n8. Se deconnecter\ns. Quitter et sauvegarder\n%. Quitter sans sauvegarder\n\nChoix : ", 'd'))) == NULL)
             break;
-        }
-        switch(reponse) {
+        switch(*reponse) {
             case '1':
                 ajoutVol(admin);
                 recommencer = false;
@@ -212,34 +175,160 @@ void menuLogicielAdministrateur(Administrateur* admin) {
     }
 }
 
-void ajoutVol(Administrateur* admin) {
-    cout << "\nVeuillez saisir le nombre de places maximal du vol : ";
-    int nb_places;
-    cin >> nb_places;
-    if(nb_places <= 0 || cin.fail()) {
-        cin.clear();
-        cout << "\nErreur, le nombre de places saisi doit etre un nombre positif\n";        
-        menuLogicielAdministrateur(admin);
-        return;
+void* saisieChamp(string msg, char flag) {
+    cout << msg;
+    switch(flag) {        
+        case 'a':
+            char* reponse;
+            cin >> *reponse;
+            if(cin.fail()) {
+                cin.clear();
+                cout << "\nErreur, veuillez saisir o (pour oui) ou n (pour non)\n";
+                return NULL;            
+            } else {
+                return reponse;
+            }
+            break;
+        case 'b':
+            char* reponse;
+            cin >> *reponse;
+            if(cin.fail()) {
+                cin.clear();
+                cout << "\nErreur, veuillez saisir 1 (pour vous connecter) ou 2 (pour retourner au menu principal)\n";
+                return NULL;
+            } else {
+                return reponse;
+            }
+            break;
+        case 'c':
+            string* reponse;
+            cin >> *reponse;
+            if(cin.fail()) {
+                cin.clear();
+                cout << "\nErreur, saisie invalide\n";
+                return NULL;
+            } else {
+                return reponse;
+            }
+            break;
+        case 'd':
+            char* reponse;
+            cin >> *reponse;
+            if(cin.fail()) {
+                cin.clear();
+                cout << "\nErreur, veuillez saisir un chiffre-commande adéquat\n";
+                return NULL;
+            } else {
+                return reponse;
+            }
+            break;
+        case 'e':
+            int* reponse;
+            cin >> *reponse;
+            if(cin.fail() || *reponse <= 0) {
+                cin.clear();
+                cout << "\nErreur, le champ saisi doit etre un nombre positif\n";
+                return NULL;
+            } else {
+                return reponse;
+            }
+            break;
+        case 'f':
+            string* reponse;
+            cin >> *reponse;
+            bool bon_format = true;
+            for(int i = 0; reponse[i] != '\0'; i++) {
+                if(!isalnum(reponse[i]))
+                    bon_format = false;
+            }
+            if(cin.fail() || !bon_format) {
+                cin.clear();
+                cout << "\nErreur, le format de numero de passeport saisi est invalide\n";
+                return NULL;
+            } else {
+                return reponse;
+            }
+            break;
+        case 'g':
+            int* reponse;
+            cin >> *reponse;
+            if(cin.fail() || *reponse < 0) {
+                cin.clear();
+                cout << "\nErreur, le nombre choisi doit etre un nombre positif\n";
+                return NULL;
+            } else {
+                return reponse;
+            }
+            break;
     }
-    cout << "Veuillez saisir le prix d'une place dans ce vol : ";
-    int prix;
-    cin >> prix;
-    if(prix <= 0 || cin.fail()) {
+}
+
+Date* saisieDate() {
+    time_t mtn = time(0);
+    tm* ltm = localtime(&mtn);
+    cout << "\nVeuillez saisir l'annee : ";
+    int annee;
+    cin >> annee;
+    if(cin.fail() || annee < 1900 + ltm->tm_year) {
         cin.clear();
-        cout << "\nErreur, le prix saisi doit etre un nombre positif\n";
-        menuLogicielAdministrateur(admin);
-        return;
+        cout << "\nErreur, l'annee saisie doit etre un nombre superieur a celui de l'annee de la date actuelle\n";
+        return NULL;
     }
-    cout << "\n ------ TRAJET ------\n";
+    cout << "Veuillez saisir le numero du mois : ";
+    int mois;
+    cin >> mois;
+    if(cin.fail() || mois < 1 || mois > 12) {
+        cin.clear();
+        cout << "\nErreur, le numero de mois saisi doit etre un nombre compris entre 1 et 12\n";
+        return NULL;
+    } else if(annee == 1900 + ltm->tm_year && mois < 1 + ltm->tm_mon) {        
+        cout << "\nErreur, le mois saisi ne peut pas etre inferieur au mois actuel si l'annee est egale\n";        
+        return NULL;
+    }
+    cout << "Veuillez saisir le numero du jour du mois : ";
+    int jour;
+    cin >> jour;
+    if(cin.fail() || jour < 1 || jour > 31) {
+        cin.clear();
+        cout << "\nErreur, le numero de jour du mois saisi doit etre un nombre compris entre 1 et 31\n";
+        return NULL;
+    } else if(annee == 1900 + ltm->tm_year && mois == 1 + ltm->tm_mon && jour < ltm->tm_mday) {        
+        cout << "\nErreur, le numero de jour du mois saisi ne peut pas etre inferieur au jour actuel si l'annee et le mois sont egaux a l'annee et le mois actuels\n";
+        return NULL;
+    }
+    cout << "Veuillez saisir le nombre d'heures : ";
+    int heures;
+    cin >> heures;
+    if(cin.fail() || heures < 0 || heures > 24) {
+        cin.clear();
+        cout << "\nErreur, le nombre d'heures saisi doit etre un nombre compris entre 0 et 23\n";        
+        return NULL;
+    } else if(annee == 1900 + ltm->tm_year && mois == 1 + ltm->tm_mon && jour == ltm->tm_mday && heures < ltm->tm_hour) {        
+        cout << "\nErreur, le nombre d'heures saisi ne peut pas etre inferieur au nombre d'heures actuel si la date est celle d'aujourd'hui\n";
+        return NULL;
+    }
+    cout << "Veuillez saisir le nombre de minutes : ";
+    int minutes;
+    cin >> minutes;
+    if(cin.fail() || minutes < 0 || minutes > 60) {
+        cin.clear();
+        cout << "\nErreur, le nombre de minutes saisi doit etre un nombre compris entre 0 et 59\n";
+        return NULL;
+    } else if(annee == 1900 + ltm->tm_year && mois == 1 + ltm->tm_mon && jour == ltm->tm_mday && heures == ltm->tm_hour && minutes < ltm->tm_min) {
+        cout << "\nErreur, le nombre de minutes saisi ne peut pas etre inferieur au nombre de minutes de l'heure actuelle si la date et est celle d'aujourd'hui et le nombre d'heures est le nombre d'heures actuel\n";
+        return NULL;
+    }
+    return new Date(annee, mois, jour, heures, minutes);
+}
+
+Destination* saisieDestination() {
     cout << "\nVeuillez saisir le nom de la ville de depart : ";
     string ville_depart;
     cin >> ville_depart;
     if(cin.fail()) {
         cin.clear();
         cout << "\nErreur, saisie invalide\n";
-        menuLogicielAdministrateur(admin);
-        return;
+        return NULL;
     }
     cout << "Veuillez saisir le nom de la ville de destination : ";
     string ville_destination;
@@ -247,74 +336,35 @@ void ajoutVol(Administrateur* admin) {
     if(cin.fail()) {
         cin.clear();
         cout << "\nErreur, saisie invalide\n";
+        return NULL;
+    }
+    return new Destination(ville_depart, ville_destination);
+}
+
+void ajoutVol(Administrateur* admin) {
+    int* nb_places;
+    if((nb_places = (int*)(saisieChamp("\nVeuillez saisir le nombre de places maximal du vol : ", 'e'))) == NULL) {
         menuLogicielAdministrateur(admin);
         return;
     }
-    time_t mtn = time(0);
-    tm* ltm = localtime(&mtn);
+    int* prix;
+    if((prix = (int*)(saisieChamp("Veuillez saisir le prix d'une place dans ce vol : ", 'e'))) == NULL) {
+        menuLogicielAdministrateur(admin);
+        return;
+    }    
+    cout << "\n ------ TRAJET ------\n";
+    Destination* dest;
+    if((dest = saisieDestination()) == NULL) {
+        menuLogicielAdministrateur(admin);
+        return;
+    }
     cout << "\n ------ DATE ------\n";
-    cout << "\nVeuillez saisir l'annee : ";
-    int annee;
-    cin >> annee;
-    if(annee < 1900 + ltm->tm_year || cin.fail()) {
-        cin.clear();
-        cout << "\nErreur, l'annee saisie doit etre un nombre superieur a celui de l'annee de la date actuelle\n";
+    Date* date;
+    if((date = saisieDate()) == NULL) {
         menuLogicielAdministrateur(admin);
         return;
     }
-    cout << "Veuillez saisir le numero du mois : ";
-    int mois;
-    cin >> mois;
-    if(mois < 1 || mois > 12 || cin.fail()) {
-        cin.clear();
-        cout << "\nErreur, le numero de mois saisi doit etre un nombre compris entre 1 et 12\n";
-        menuLogicielAdministrateur(admin);
-        return;
-    } else if(annee == 1900 + ltm->tm_year && mois < 1 + ltm->tm_mon) {        
-        cout << "\nErreur, le mois saisi ne peut pas etre inferieur au mois actuel si l'annee est egale\n";
-        menuLogicielAdministrateur(admin);
-        return;
-    }
-    cout << "Veuillez saisir le numero du jour du mois : ";
-    int jour;
-    cin >> jour;
-    if(jour < 1 || jour > 31 || cin.fail()) {
-        cin.clear();
-        cout << "\nErreur, le numero de jour du mois saisi doit etre un nombre compris entre 1 et 31\n";
-        menuLogicielAdministrateur(admin);
-        return;
-    } else if(annee == 1900 + ltm->tm_year && mois == 1 + ltm->tm_mon && jour < ltm->tm_mday) {        
-        cout << "\nErreur, le numero de jour du mois saisi ne peut pas etre inferieur au jour actuel si l'annee et le mois sont egaux a l'annee et le mois actuels\n";
-        menuLogicielAdministrateur(admin);
-        return;
-    }
-    cout << "Veuillez saisir le nombre d'heures : ";
-    int heures;
-    cin >> heures;
-    if(heures < 0 || heures > 24 || cin.fail()) {
-        cin.clear();
-        cout << "\nErreur, le nombre d'heures saisi doit etre un nombre compris entre 0 et 23\n";
-        menuLogicielAdministrateur(admin);
-        return;
-    } else if(annee == 1900 + ltm->tm_year && mois == 1 + ltm->tm_mon && jour == ltm->tm_mday && heures < ltm->tm_hour) {        
-        cout << "\nErreur, le nombre d'heures saisi ne peut pas etre inferieur au nombre d'heures actuel si la date est celle d'aujourd'hui\n";
-        menuLogicielAdministrateur(admin);
-        return;
-    }
-    cout << "Veuillez saisir le nombre de minutes : ";
-    int minutes;
-    cin >> minutes;
-    if(minutes < 0 || minutes > 60 || cin.fail()) {
-        cin.clear();
-        cout << "\nErreur, le nombre de minutes saisi doit etre un nombre compris entre 0 et 59\n";
-        menuLogicielAdministrateur(admin);
-        return;
-    } else if(annee == 1900 + ltm->tm_year && mois == 1 + ltm->tm_mon && jour == ltm->tm_mday && heures == ltm->tm_hour && minutes < ltm->tm_min) {        
-        cout << "\nErreur, le nombre de minutes saisi ne peut pas etre inferieur au nombre de minutes de l'heure actuelle si la date et est celle d'aujourd'hui et le nombre d'heures est le nombre d'heures actuel\n";        
-        menuLogicielAdministrateur(admin);
-        return;
-    }
-    admin->ajouterVol(nb_places, prix, ville_depart, ville_destination, annee, mois, jour, heures, minutes);
+    admin->ajouterVol(*nb_places, *prix, *dest, *date);
     cout << "\nAjout du vol fait" << endl;
     menuLogicielAdministrateur(admin);
 }
@@ -325,145 +375,60 @@ void affichageListeVols(Administrateur* admin) {
 }
 
 void modificationDateVol(Administrateur* admin) {
-    cout << "\nVeuillez saisir le numero du vol choisi : ";
-    int num_vol;
-    cin >> num_vol;
-    if(!(admin->ExistenceVol(num_vol))) {
+    int* num_vol;
+    if((num_vol = (int*)(saisieChamp("\nVeuillez saisir le numero du vol choisi : ", 'e'))) == NULL) {
+        menuLogicielAdministrateur(admin);
+        return;
+    }
+    if(!(admin->ExistenceVol(*num_vol))) {
         cout << "\nErreur, le numero saisi ne correspond a aucun vol\n";
         menuLogicielAdministrateur(admin);
         return;
     }
     cout << "\nVoici le vol correspondant : ";
-    Vol::getVol(num_vol)->afficherVol();
-    time_t mtn = time(0);
-    tm* ltm = localtime(&mtn);
-    cout << "\nVeuillez saisir la nouvelle annee : ";
-    int annee;
-    cin >> annee;
-    if(annee < 1900 + ltm->tm_year || cin.fail()) {
-        cin.clear();
-        cout << "\nErreur, l'annee saisie doit etre un nombre superieur a celui de l'annee de la date actuelle\n";
+    Vol::getVol(*num_vol)->afficherVol();
+    Date* date;
+    if((date = saisieDate()) == NULL) {
         menuLogicielAdministrateur(admin);
         return;
     }
-    cout << "Veuillez saisir le numero du mois : ";
-    int mois;
-    cin >> mois;
-    if(mois < 1 || mois > 12 || cin.fail()) {
-        cin.clear();
-        cout << "\nErreur, le numero de mois saisi doit etre un nombre compris entre 1 et 12\n";
-        menuLogicielAdministrateur(admin);
-        return;
-    } else if(annee == 1900 + ltm->tm_year && mois < 1 + ltm->tm_mon) {        
-        cout << "\nErreur, le mois saisi ne peut pas etre inferieur au mois actuel si l'annee est egale\n";
-        menuLogicielAdministrateur(admin);
-        return;
-    }
-    cout << "Veuillez saisir le numero du jour du mois : ";
-    int jour;
-    cin >> jour;
-    if(jour < 1 || jour > 31 || cin.fail()) {
-        cin.clear();
-        cout << "\nErreur, le numero de jour du mois saisi doit etre un nombre compris entre 1 et 31\n";
-        menuLogicielAdministrateur(admin);
-        return;
-    } else if(annee == 1900 + ltm->tm_year && mois == 1 + ltm->tm_mon && jour < ltm->tm_mday) {        
-        cout << "\nErreur, le numero de jour du mois saisi ne peut pas etre inferieur au jour actuel si l'annee et le mois sont egaux a l'annee et le mois actuels\n";
-        menuLogicielAdministrateur(admin);
-        return;
-    }
-    cout << "Veuillez saisir le nombre d'heures : ";
-    int heures;
-    cin >> heures;
-    if(heures < 0 || heures > 24) {
-        cin.clear();
-        cout << "\nErreur, le nombre d'heures saisi doit etre un nombre compris entre 0 et 23\n";
-        menuLogicielAdministrateur(admin);
-        return;
-    } else if(annee == 1900 + ltm->tm_year && mois == 1 + ltm->tm_mon && jour == ltm->tm_mday && heures < ltm->tm_hour) {        
-        cout << "\nErreur, le nombre d'heures saisi ne peut pas etre inferieur au nombre d'heures actuel si la date est celle d'aujourd'hui\n";
-        menuLogicielAdministrateur(admin);
-        return;
-    }
-    cout << "Veuillez saisir le nombre de minutes : ";
-    int minutes;
-    cin >> minutes;
-    if(minutes < 0 || minutes > 60 || cin.fail()) {
-        cin.clear();
-        cout << "\nErreur, le nombre de minutes saisi doit etre un nombre compris entre 0 et 59\n";
-        menuLogicielAdministrateur(admin);
-        return;
-    } else if(annee == 1900 + ltm->tm_year && mois == 1 + ltm->tm_mon && jour == ltm->tm_mday && heures == ltm->tm_hour && minutes < ltm->tm_min) {        
-        cout << "\nErreur, le nombre de minutes saisi ne peut pas etre inferieur au nombre de minutes de l'heure actuelle si la date et est celle d'aujourd'hui et le nombre d'heures est le nombre d'heures actuel\n";        
-        menuLogicielAdministrateur(admin);
-        return;
-    }
-    admin->ModifierDateVol(num_vol, annee, mois, jour, heures, minutes);
+    admin->ModifierDateVol(*num_vol, *date);
     cout << "\nModification de date effectuee\n";
     menuLogicielAdministrateur(admin);
 }
 
 void ajoutPassager(Administrateur* admin) {
-    cout << "\nVeuillez saisir le numero de passeport du passager a ajouter : ";
-    string num_passeport;
-    cin >> num_passeport;
-    bool bon_format = true;
-    for(int i = 0; num_passeport[i] != '\0'; i++) {
-        if(!isalnum(num_passeport[i]))
-            bon_format = false;
-    }
-    if(!bon_format || cin.fail()) {
-        cin.clear();
-        cout << "\nErreur, le format de numero de passeport saisi est invalide\n";        
+    string* num_passeport;
+    if((num_passeport = (string*)(saisieChamp("\nVeuillez saisir le numero de passeport du passager a ajouter : ", 'f'))) == NULL) {
         menuLogicielAdministrateur(admin);
         return;
     }
-    cout << "Veuillez saisir le mot de passe du passager a ajouter : ";
-    string mot_de_passe;
-    cin >> mot_de_passe;
-    if(cin.fail()) {
-        cin.clear();
-        cout << "\nErreur, saisie invalide\n";
+    string* mot_de_passe;
+    if((mot_de_passe = (string*)(saisieChamp("Veuillez saisir le mot de passe du passager a ajouter : ", 'c'))) == NULL) {
         menuLogicielAdministrateur(admin);
         return;
     }
-    cout << "\nVeuillez saisir le prenom du passager : ";
-    string prenom;
-    cin >> prenom;
-    if(cin.fail()) {
-        cin.clear();
-        cout << "\nErreur, saisie invalide\n";
+    string* prenom;
+    if((prenom = (string*)(saisieChamp("\nVeuillez saisir le prenom du passager : ", 'c'))) == NULL) {
         menuLogicielAdministrateur(admin);
         return;
     }
-    cout << "\nVeuillez saisir le nom du passager : ";
-    string nom;
-    cin >> nom;
-    if(cin.fail()) {
-        cin.clear();
-        cout << "\nErreur, saisie invalide\n";
+    string* nom;
+    if((nom = (string*)(saisieChamp("\nVeuillez saisir le nom du passager : ", 'c'))) == NULL) {
         menuLogicielAdministrateur(admin);
         return;
     }
-    cout << "\nVeuillez saisir le titre du passager : ";
-    string titre;
-    cin >> titre;
-    if(cin.fail()) {
-        cin.clear();
-        cout << "\nErreur, saisie invalide\n";
+    string* titre;
+    if((titre = (string*)(saisieChamp("\nVeuillez saisir le titre du passager : ", 'c'))) == NULL) {
         menuLogicielAdministrateur(admin);
         return;
     }
-    cout << "\nVeuillez saisir l'age du passager : ";
-    int age;
-    cin >> age;
-    if(age < 0 || cin.fail()) {
-        cin.clear();
-        cout << "\nErreur, l'age saisi doit etre un nombre positif\n";
+    int* age;
+    if((age = (int*)(saisieChamp("\nVeuillez saisir l'age du passager : ", 'g'))) == NULL) {
         menuLogicielAdministrateur(admin);
         return;
     }
-    admin->ajouterPassager(prenom, nom, titre, num_passeport, mot_de_passe, age);
+    admin->ajouterPassager(*prenom, *nom, *titre, *num_passeport, *mot_de_passe, *age);
     cout << "\nAjout du passager fait\n";
     menuLogicielAdministrateur(admin);
 }
@@ -474,31 +439,33 @@ void affichageListePassagers(Administrateur* admin) {
 }
 
 void ajouterReservation(Administrateur* admin) {
-    cout << "\nVeuillez saisir le numero de passeport du passager : ";
-    string num_passeport;
-    cin >> num_passeport;
-    if(!(admin->ExistencePassager(num_passeport)) || cin.fail()) {
+    string* num_passeport;
+    if((num_passeport = (string*)(saisieChamp("\nVeuillez saisir le numero de passeport du passager : ", 'f'))) == NULL) {
+        menuLogicielAdministrateur(admin);
+        return;
+    }
+    if(!(admin->ExistencePassager(*num_passeport))) {
         cin.clear();
         cout << "\nErreur, le numero de passeport ne correspond a aucun passager existant\n";
         menuLogicielAdministrateur(admin);
         return;
     }
-    cout << "Veuillez saisir le numero du vol : ";
-    int num_vol;
-    cin >> num_vol;
-    if(!(admin->ExistenceVol(num_vol)) || cin.fail()) {
+    int* num_vol;
+    if((num_vol = (int*)(saisieChamp("\nVeuillez saisir le numero du vol : ", 'e'))) == NULL) {
+        menuLogicielAdministrateur(admin);
+        return;
+    }
+    if(cin.fail() || !(admin->ExistenceVol(*num_vol))) {
         cin.clear();
         cout << "\nErreur, le numero saisi ne correspond a aucun vol\n";
         menuLogicielAdministrateur(admin);
         return;
-    }  else if(Reservation::reservationExistante(num_passeport, num_vol)) {
+    }  else if(Reservation::reservationExistante(*num_passeport, *num_vol)) {
         cout << "\nErreur, la reservation en quesiton existe deja\n";
         menuLogicielAdministrateur(admin);
         return;
     }
-    Passager* passager = Passager::getPassager(num_passeport);
-    Vol* vol = Vol::getVol(num_vol);
-    if(admin->ajouterReservation(passager, vol))
+    if(admin->ajouterReservation(Passager::getPassager(*num_passeport), Vol::getVol(*num_vol)))
         cout << "\nAjout de la reservation fait\n";
     else
         cout << "\nLa reservation ne peut pas etre effectuee car l'avion est deja plein\n";
@@ -507,20 +474,11 @@ void ajouterReservation(Administrateur* admin) {
 
 void choixAffichageReservations(Administrateur* admin) {
     bool recommencer = true;
-    while(recommencer) {    
-        cout << "\nAu choix : \n";
-        cout << "\n1. Afficher la liste de toutes les reservations tous vols et tous passagers confondus";
-        cout << "\n2. Afficher la liste des reservations pour un vol particulier";
-        cout << "\n3. Afficher la liste des reservations d'un passager\n\n";
-        cout << "Choix : ";
-        char reponse;
-        cin >> reponse;        
-        if(cin.fail()) {
-            cin.clear();
-            cout << "\nErreur, veuillez saisir un chiffre-commande adéquat\n";
+    while(recommencer) {
+        char* reponse;
+        if((reponse = (char*)(saisieChamp("\nAu choix : \n\n1. Afficher la liste de toutes les reservations tous vols et tous passagers confondus\n2. Afficher la liste des reservations pour un vol particulier\n3. Afficher la liste des reservations d'un passager\n\nChoix : ", 'd'))) == NULL)
             break;
-        }
-        switch(reponse) {
+        switch(*reponse) {
             case '1':
                 affichageToutesReservations(admin);
                 recommencer = false;
@@ -546,27 +504,31 @@ void affichageToutesReservations(Administrateur* admin) {
 }
 
 void affichageReservationsVol(Administrateur* admin) {
-    cout << "\nVeuillez saisir le numero du vol choisi : ";
-    int num_vol;
-    cin >> num_vol;
-    if(!(admin->ExistenceVol(num_vol)) || cin.fail()) {
+    int* num_vol;
+    if((num_vol = (int*)(saisieChamp("\nVeuillez saisir le numero du vol choisi : ", 'e'))) == NULL) {
+        menuLogicielAdministrateur(admin);
+        return;
+    }   
+    if(!(admin->ExistenceVol(*num_vol))) {
         cin.clear();
         cout << "\nErreur, le numero saisi ne correspond a aucun vol\n";
         return;
     }
-    admin->AfficherListeReservations(num_vol);
+    admin->AfficherListeReservations(*num_vol);
 }
 
 void affichageReservationsPassager(Administrateur* admin) {
-    cout << "\nVeuillez saisir le numero de passeport du passager choisi : ";
-    string num_passeport;
-    cin >> num_passeport;
-    if(!(admin->ExistencePassager(num_passeport)) || cin.fail()) {
+    string* num_passeport;
+    if((num_passeport = (string*)(saisieChamp("\nVeuillez saisir le numero de passeport du passager choisi : ", 'f'))) == NULL) {
+        menuLogicielAdministrateur(admin);
+        return;
+    }
+    if(!(admin->ExistencePassager(*num_passeport))) {
         cin.clear();
         cout << "\nErreur, le numero de passeport saisi ne correspond à aucun passager\n";
         return;
     }
-    Passager::getPassager(num_passeport)->AfficherListeReservations();
+    Passager::getPassager(*num_passeport)->AfficherListeReservations();
 }
 
 void deconnexion() {
@@ -583,19 +545,11 @@ void quitter(bool sauvegarder) {
 
 void pageConnexionPassager() {
     bool recommencer = true;
-    while(recommencer) {    
-        cout << "\n\nPage de connexion des passagers : \n";
-        cout << "\n1. Se connecter";
-        cout << "\n2. Retour au menu principal\n\n";
-        cout << "Choix : ";
-        char reponse;
-        cin >> reponse;
-        if(cin.fail()) {
-            cin.clear();
-            cout << "\nErreur, veuillez saisir 1 (pour vous connecter) ou 2 (pour retourner au menu principal)\n";
+    while(recommencer) {
+        char* reponse;
+        if((reponse = (char*)(saisieChamp("\n\nPage de connexion des passagers : \n\n1. Se connecter\n2. Retour au menu principal\n\nChoix : ", 'd'))) == NULL)
             break;
-        }
-        switch(reponse) {
+        switch(*reponse) {
             case '1':
                 connexionPassager();
                 recommencer = false;
@@ -612,30 +566,17 @@ void pageConnexionPassager() {
 }
 
 void connexionPassager() {
-    cout << "\nVeuillez saisir votre numero de passeport : ";
-    string num_passeport;
-    cin >> num_passeport;
-    bool bon_format = true;
-    for(int i = 0; num_passeport[i] != '\0'; i++) {
-        if(!isalnum(num_passeport[i]))
-            bon_format = false;
-    }
-    if(!bon_format || cin.fail()) {
-        cin.clear();
-        cout << "\nErreur, le format de numero de passeport saisi est invalide\n";     
+    string* num_passeport;
+    if((num_passeport = (string*)(saisieChamp("\nVeuillez saisir votre numero de passeport : ", 'f'))) == NULL) {
         pageConnexionPassager();
         return;
     }
-    cout << "Veuillez saisir votre mot de passe : ";
-    string mdp;
-    cin >> mdp;
-    if(cin.fail()) {
-        cin.clear();
-        cout << "\nErreur, saisie invalide\n";
+    string* mot_de_passe;
+    if((mot_de_passe = (string*)(saisieChamp("Veuillez saisir votre mot de passe : ", 'c'))) == NULL) {
         pageConnexionPassager();
         return;
     }
-    Passager* passager = Passager::getPassager(num_passeport, mdp);
+    Passager* passager = Passager::getPassager(*num_passeport, *mot_de_passe);
     if(passager != NULL) {
         cout << "\nIdentification reussie\n";
         menuLogicielPassager(passager);
@@ -649,24 +590,10 @@ void menuLogicielPassager(Passager* passager) {
     cout << "\nVous etes connecte en tant que " << passager->getPrenom() << " " << passager->getNom() << endl;
     bool recommencer = true;
     while(recommencer) {
-        cout << "Veuillez choisir l'une des actions suivantes a effectuer\n";
-        cout << "\n1. Afficher la liste des vols";
-        cout << "\n2. Reserver un vol";
-        cout << "\n3. Afficher la liste de mes reservations";
-        cout << "\n4. Confirmer une reservation";
-        cout << "\n5. Annuler une reservation";
-        cout << "\n6. Se deconnecter";
-        cout << "\ns. Quitter et sauvegarder";
-        cout << "\n%. Quitter sans sauvegarder\n\n";
-        cout << "Choix : ";
-        char reponse;
-        cin >> reponse;
-        if(cin.fail()) {
-            cin.clear();
-            cout << "\nErreur, veuillez saisir un chiffre-commande adéquat\n";
+        char* reponse;
+        if((reponse = (char*)(saisieChamp("Veuillez choisir l'une des actions suivantes a effectuer\n\n1. Afficher la liste des vols\n2. Reserver un vol\n3. Afficher la liste de mes reservations\n4. Confirmer une reservation\n5. Annuler une reservation\n6. Se deconnecter\ns. Quitter et sauvegarder\n%. Quitter sans sauvegarder\n\n", 'd'))) == NULL)
             break;
-        }
-        switch(reponse) {
+        switch(*reponse) {
             case '1':
                 affichageListeVols(passager);
                 recommencer = false;
@@ -712,20 +639,22 @@ void affichageListeVols(Passager* passager) {
 }
 
 void reservationVol(Passager* passager) {
-    cout << "\nVeuillez saisir le numero du vol : ";
-    int num_vol;
-    cin >> num_vol;
-    if(!(passager->ExistenceVol(num_vol)) || cin.fail()) {
+    int* num_vol;
+    if((num_vol = (int*)(saisieChamp("\nVeuillez saisir le numero du vol choisi : ", 'e'))) == NULL) {
+        menuLogicielPassager(passager);
+        return;
+    }
+    if(!(passager->ExistenceVol(*num_vol))) {
         cin.clear();
         cout << "\nErreur, le numero saisi ne correspond a aucun vol\n";
         menuLogicielPassager(passager);
         return;
-    } else if(Reservation::reservationExistante(passager->getNum_passeport(), num_vol)) {
+    } else if(Reservation::reservationExistante(passager->getNum_passeport(), *num_vol)) {
         cout << "\nErreur, vous disposez deja d'une reservation pour ce vol\n";
         menuLogicielPassager(passager);
         return;
     }
-    if(passager->ReserverVol(num_vol))
+    if(passager->ReserverVol(*num_vol))
         cout << "\nAjout de la reservation fait\n";
     else
         cout << "\nLa reservation ne peut pas etre effectuee car l'avion est deja plein\n";
@@ -738,36 +667,41 @@ void affichageListeReservationsPassager(Passager* passager) {
 }
 
 void confirmerReservation(Passager* passager) {
-    cout << "\nVeuillez saisir le numero de la reservation a confirmer : ";
-    int num_reservation;
-    cin >> num_reservation;
-    if(!(passager->ExistenceReservation(num_reservation)) || cin.fail()) {
+    int* num_reservation;
+    if((num_reservation = (int*)(saisieChamp("\nVeuillez saisir le numero de la reservation a confirmer : ", 'e'))) == NULL) {
+        menuLogicielPassager(passager);
+        return;
+    }
+    if(!(passager->ExistenceReservation(*num_reservation))) {
         cin.clear();
         cout << "\nErreur, le numero saisi ne correspond a aucune de vos reservations\n";
         menuLogicielPassager(passager);
         return;
     }
-    passager->ConfirmerReservation(num_reservation);
+    passager->ConfirmerReservation(*num_reservation);
     cout << "\nConfirmation faite\n";
     menuLogicielPassager(passager);
 }
 
 void annulerReservation(Passager* passager) {
-    cout << "\nVeuillez saisir le numero de la reservation a annuler : ";
-    int num_reservation;
-    cin >> num_reservation;
-    if(!(passager->ExistenceReservation(num_reservation)) || cin.fail()) {
+    int* num_reservation;
+    if((num_reservation = (int*)(saisieChamp("\nVeuillez saisir le numero de la reservation a annuler : ", 'e'))) == NULL) {
+        menuLogicielPassager(passager);
+        return;
+    }
+    if(!(passager->ExistenceReservation(*num_reservation))) {
         cin.clear();
         cout << "\nErreur, le numero saisi ne correspond a aucune de vos reservations\n";
         menuLogicielPassager(passager);
         return;
     }
-    passager->AnnulerReservation(num_reservation);
+    passager->AnnulerReservation(*num_reservation);
     cout << "\nAnnulation faite\n";
     menuLogicielPassager(passager);
 }
 
 int main() {
+
     Administrateur::chargerAdministrateurs();
     Passager::chargerPassagers();
     menuPrincipal();

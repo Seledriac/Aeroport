@@ -26,19 +26,36 @@ Administrateur* Administrateur::getAdministrateur(string identifiant, string mot
     return admin;
 }
 
-void Administrateur::ajouterVol(int nb_de_places, int prix, string ville_depart, string ville_destination, int annee, int mois, int jour, int heures, int minutes){
-    new Vol(nb_de_places, prix, ville_depart, ville_destination, annee, mois, jour, heures, minutes);
+void Administrateur::ajouterVol(int nb_de_places, int prix, Destination dest, Date date){
+    new Vol(nb_de_places, prix, dest, date);
 }
 
 void Administrateur::ajouterPassager(string nom, string prenom, string titre, string num_passeport, string mot_de_passe, int age) {
     Passager::nouveauPassager(nom, prenom, titre, num_passeport, mot_de_passe, age);
 }
 
-void Administrateur::AfficherListeVols(){
+void Administrateur::AfficherListeVols(Destination* dest = NULL, Date* date = NULL){
     cout << endl;
     list<Vol*> vols = Vol::getVols();
     for(list<Vol*>::const_iterator it = vols.begin(); it != vols.end(); it++) {
-        (*it)->afficherVol();
+        if(dest == NULL && date == NULL) {
+            (*it)->afficherVol();
+        } 
+        if(dest != NULL
+            && date == NULL
+            && (*it)->getDestination()->getVille_depart() == dest->getVille_depart() 
+            && (*it)->getDestination()->getVille_arrivee() == dest->getVille_arrivee()) {
+            
+        } else if(dest == NULL
+            && date != NULL
+            && (*it)->getDate()->getAnnee() == date->getAnnee() 
+            && (*it)->getDate()->getMois() == date->getMois() 
+            && (*it)->getDate()->getJour() == date->getJour() 
+            && (*it)->getDate()->getHeures() == date->getHeures()
+            && (*it)->getDate()->getMinutes() == date->getMinutes() {            
+        } else {
+            ;
+        }    
     }
     cout << endl;
 }
@@ -66,8 +83,8 @@ bool Administrateur::ajouterReservation(Passager* passager, Vol* vol){
     return passager->ReserverVol(vol->getNum_vol());
 }
 
-void Administrateur::ModifierDateVol(int num_vol, int annee, int mois, int jour, int heures, int minutes){
-    Vol::getVol(num_vol)->setDate(annee, mois, jour, heures, minutes);
+void Administrateur::ModifierDateVol(int num_vol, Date &date){
+    Vol::getVol(num_vol)->setDate(date);
 }
 
 bool Administrateur::ExistenceVol(int num_vol){

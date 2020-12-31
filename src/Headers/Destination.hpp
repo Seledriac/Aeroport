@@ -14,6 +14,8 @@ class Destination {
     public :
         Destination(string, string);
         string to_string() const;
+        string getVille_depart();
+        string getVille_arrivee();
 };
 
 #endif

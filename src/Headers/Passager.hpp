@@ -18,7 +18,7 @@ class Passager {
     string nom, prenom, titre, num_passeport, mot_de_passe;
     int age;
 
-    Passager(string, string, string, string, string, int);
+    Passager(string, string, string, string, string, int); // privé car on ne veut pas que l'utilisateur puisse créer des passagers
 
     public :    
         static Passager* getPassager(string, string);
@@ -26,7 +26,7 @@ class Passager {
         bool ReserverVol(int);
         void ConfirmerReservation(int);
         void AnnulerReservation(int);
-        void AfficherListeVols();
+        void AfficherListeVols(Destination*, Date*);
         void AfficherListeReservations();
         bool ExistenceVol(int);
         bool ExistenceReservation(int);
