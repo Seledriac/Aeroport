@@ -1,3 +1,5 @@
+// Auteurs : Tom BOUMBA et Antoine Zaug, promo L3 info à la FST de l'université de Limoges
+
 // Commande de compilation (à exécuter depuis la racine du projet):
 // g++ ./src/main.cpp ./src/Implementations/*.cpp -std=c++17
 

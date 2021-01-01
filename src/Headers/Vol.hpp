@@ -1,3 +1,5 @@
+// Auteurs : Tom BOUMBA et Antoine Zaug, promo L3 info à la FST de l'université de Limoges
+
 #ifndef Vol_H_
 #define Vol_H_
 
