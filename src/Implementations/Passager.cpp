@@ -11,6 +11,7 @@
 #endif
 
 #include <iostream>
+#include <fstream>
 
 list<Passager*> Passager::passagers;
 
@@ -140,25 +141,41 @@ string Passager::getNom() {
     return nom;
 }
 
+string Passager::getTitre() {
+    return titre;
+}
+
+int Passager::getAge() {
+    return age;
+}
+
+string Passager::getMot_de_passe() {
+    return mot_de_passe;
+}
+
 void Passager::afficherPassager() {
     cout << num_passeport << " => " << prenom << " " << nom << " : " << titre << ", " << age << " ans" << endl;
 }
 
 void Passager::chargerPassagers() {
-    // tests
-    string num_passeport = "0FE";
-    string mdp = "pass";
-    string nom = "boumba";
-    string prenom = "tom";
-    string titre = "Homme";
-    int age = 20;
-    passagers.push_back(new Passager(nom, prenom, titre, num_passeport, mdp, age));
-    num_passeport = "A2F";
-    mdp = "pass";
-    nom = "zaug";
-    prenom = "antoine";
-    titre = "Homme";
-    age = 20;
-    passagers.push_back(new Passager(nom, prenom, titre, num_passeport, mdp, age));
-    // connexion bdd (tous les passagers sont chargés vers la liste "passagers")
+    fstream fichier_passagers;
+	fichier_passagers.open("./src/donnees/Passagers.txt", ios::in);
+	string line;
+    if(fichier_passagers.is_open()) {
+        while(getline(fichier_passagers, line)) { // Une ligne par administrateur
+            string infos[6];
+            size_t start;
+            size_t end = 0;
+            int i = 0;
+            while((start = line.find_first_not_of(":", end)) != std::string::npos) {
+                end = line.find(":", start);
+                infos[i] = line.substr(start, end - start);
+                i++;
+            }
+            passagers.push_back(new Passager(infos[0], infos[1], infos[2], infos[3], infos[4], stoi(infos[5])));
+        }
+    } else {
+        cout << "Erreur lors de l'ouverture du fichier des administrateurs";
+    }
+    fichier_passagers.close();
 }

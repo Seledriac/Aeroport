@@ -3,6 +3,7 @@
 #endif
 
 #include <iostream>
+#include <fstream>
 
 list<Vol*> Vol::vols;
 
@@ -74,5 +75,24 @@ void Vol::afficherVol() {
 }
 
 void Vol::chargerVols() {
-    
+    fstream fichier_vols;
+	fichier_vols.open("./src/donnees/Vols.txt", ios::in);
+	string line;
+    if(fichier_vols.is_open()) {
+        while(getline(fichier_vols, line)) { // Une ligne par vol
+            string infos[8];
+            size_t start;
+            size_t end = 0;
+            int i = 0;
+            while((start = line.find_first_not_of(":", end)) != std::string::npos) {
+                end = line.find(":", start);
+                infos[i] = line.substr(start, end - start);
+                i++;
+            }
+            new Vol(stoi(infos[0]), stoi(infos[1]), *(new Destination(infos[2], infos[3])), *(new Date(stoi(infos[4]), stoi(infos[5]), stoi(infos[6]), stoi(infos[7]), stoi(infos[8]))));
+        }
+    } else {
+        cout << "Erreur lors de l'ouverture du fichier des vols";
+    }
+    fichier_vols.close();
 }

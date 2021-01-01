@@ -7,6 +7,7 @@
 #endif
 
 #include <iostream>
+#include <fstream>
 
 list<Administrateur*> Administrateur::administrateurs;
 
@@ -114,14 +115,34 @@ bool Administrateur::ExistencePassager(string num_passeport){
 }
 
 void Administrateur::chargerAdministrateurs() {
-    // tests
-    string identifiant = "tom";
-    string mdp = "pass";
-    administrateurs.push_back(new Administrateur(identifiant, mdp));
-    identifiant = "antoine";
-    mdp = "pass";
-    administrateurs.push_back(new Administrateur(identifiant, mdp));
-    // connexion bdd (tous les administrateurs sont chargés vers la liste "administrateurs")
+    fstream fichier_admins;
+	fichier_admins.open("./src/donnees/Administrateurs.txt", ios::in);
+	string line;
+    if(fichier_admins.is_open()) {
+        while(getline(fichier_admins, line)) { // Une ligne par administrateur
+            string infos[2];
+            size_t start;
+            size_t end = 0;
+            int i = 0;
+            while((start = line.find_first_not_of(":", end)) != std::string::npos) {
+                end = line.find(":", start);
+                infos[i] = line.substr(start, end - start);
+                i++;
+            }
+            administrateurs.push_back(new Administrateur(infos[0], infos[1]));
+        }
+    } else {
+        cout << "Erreur lors de l'ouverture du fichier des administrateurs";
+    }
+    fichier_admins.close();
+}
+
+list<Administrateur*> Administrateur::getAdministrateurs() {
+    list<Administrateur*> liste;
+    for(list<Administrateur*>::const_iterator it = administrateurs.begin(); it != administrateurs.end(); it++) {
+        liste.push_back(*it);
+    }
+    return liste;
 }
 
 string Administrateur::getIdentifiant() {

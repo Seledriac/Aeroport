@@ -26,6 +26,7 @@
 #endif
 
 #include <iostream>
+#include <fstream>
 #include <ctime>
 #include <regex>
 
@@ -703,7 +704,51 @@ void deconnexion(Passager* passager, Administrateur* admin) {
 
 void quitter(bool sauvegarder) {
     if(sauvegarder) {
-        // connexion bdd et insertion des listes dans leurs tables correspondantes
+        fstream fichier_passagers;
+        fichier_passagers.open("./src/donnees/Passagers.txt", ios::out);
+        list<Passager*> passagers = Passager::getPassagers();
+        list<Passager*>::iterator fin_passagers = passagers.end(); fin_passagers--;
+        for(list<Passager*>::const_iterator it = passagers.begin(); it != passagers.end(); it++) {
+            fichier_passagers << (*it)->getNom() << ":";
+            fichier_passagers << (*it)->getPrenom() << ":";
+            fichier_passagers << (*it)->getTitre() << ":";
+            fichier_passagers << (*it)->getNum_passeport() << ":";
+            fichier_passagers << (*it)->getMot_de_passe() << ":";
+            fichier_passagers << (*it)->getAge();
+            if(*it != *fin_passagers)
+                fichier_passagers << "\n";
+        }
+        fichier_passagers.close();
+        fstream fichier_vols;
+        fichier_vols.open("./src/donnees/Vols.txt", ios::out);
+        list<Vol*> vols = Vol::getVols();
+        list<Vol*>::iterator fin_vols = vols.end(); fin_vols--;
+        for(list<Vol*>::const_iterator it = vols.begin(); it != vols.end(); it++) {
+            fichier_vols << (*it)->getNb_places() << ":";
+            fichier_vols << (*it)->getPrix() << ":";
+            fichier_vols << (*it)->getDestination()->getVille_depart() << ":";
+            fichier_vols << (*it)->getDestination()->getVille_arrivee() << ":";
+            fichier_vols << (*it)->getDate()->getAnnee() << ":";
+            fichier_vols << (*it)->getDate()->getMois() << ":";
+            fichier_vols << (*it)->getDate()->getJour() << ":";
+            fichier_vols << (*it)->getDate()->getHeures() << ":";
+            fichier_vols << (*it)->getDate()->getMinutes();            
+            if(*it != *fin_vols)
+                fichier_vols << "\n";
+        }
+        fichier_vols.close();
+        fstream fichier_reservations;
+        fichier_reservations.open("./src/donnees/Reservations.txt", ios::out);        
+        list<Reservation*> reservations = Reservation::getReservations();
+        list<Reservation*>::iterator fin_reservations = reservations.end(); fin_reservations--;
+        for(list<Reservation*>::const_iterator it = reservations.begin(); it != reservations.end(); it++) {
+            fichier_reservations << (*it)->getNum_passeport() << ":";
+            fichier_reservations << (*it)->getNum_vol() << ":";
+            fichier_reservations << (*it)->EstConfirmee();
+            if(*it != *fin_reservations)
+                fichier_reservations << "\n";
+        }
+        fichier_reservations.close();
     }
     cout << "\nAu revoir\n" << endl;
 }
@@ -872,5 +917,7 @@ void annulerReservation(Passager* passager) {
 int main() {
     Administrateur::chargerAdministrateurs();
     Passager::chargerPassagers();
+    Vol::chargerVols();
+    Reservation::chargerReservations();
     menuPrincipal();
 }

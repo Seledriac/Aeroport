@@ -38,6 +38,7 @@ class Administrateur {
         bool ExistenceReservation(int);
         bool ExistencePassager(string);
         static void chargerAdministrateurs();
+        static list<Administrateur*> getAdministrateurs();
         string getIdentifiant();
         string getMot_de_passe();
 };

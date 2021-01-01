@@ -3,14 +3,15 @@
 #endif
 
 #include <iostream>
+#include <fstream>
 
 list<Reservation*> Reservation::reservations;
 
-Reservation::Reservation(Passager* passager, Vol* vol) {
+Reservation::Reservation(Passager* passager, Vol* vol, bool confirmation) {
     num_passeport = passager->getNum_passeport();
     num_vol = vol->getNum_vol();
     num_reservation = reservations.size() + 1;
-    confirmation = false;
+    this->confirmation = confirmation;
     reservations.push_back(this);
 }
 
@@ -26,6 +27,12 @@ void Reservation::Annuler() {
         confirmation = false;    
         Vol::getVol(num_vol)->setNbPlaces(Vol::getVol(num_vol)->getNb_places() + 1);
     }
+}
+
+int Reservation::EstConfirmee() {
+    if(confirmation)
+        return 1;
+    return 0;
 }
 
 Reservation* Reservation::getReservation(int num_reservation) {
@@ -62,7 +69,26 @@ int Reservation::getNum_vol() {
 }
 
 void Reservation::chargerReservations() {
-    
+    fstream fichier_vols;
+	fichier_vols.open("./src/donnees/Reservations.txt", ios::in);
+	string line;
+    if(fichier_vols.is_open()) {
+        while(getline(fichier_vols, line)) { // Une ligne par reservation
+            string infos[3];
+            size_t start;
+            size_t end = 0;
+            int i = 0;
+            while((start = line.find_first_not_of(":", end)) != std::string::npos) {
+                end = line.find(":", start);
+                infos[i] = line.substr(start, end - start);
+                i++;
+            }        
+            new Reservation(Passager::getPassager(infos[0]), Vol::getVol(stoi(infos[1])), (bool)stoi(infos[2]));
+        }
+    } else {
+        cout << "Erreur lors de l'ouverture du fichier des reservations";
+    }
+    fichier_vols.close();
 }
 
 bool Reservation::reservationExistante(string num_passeport, int num_vol) {

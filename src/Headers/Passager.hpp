@@ -38,8 +38,11 @@ class Passager {
         bool ExistenceReservation(int);
         static list<Passager*> getPassagers();
         string getNum_passeport();
+        string getMot_de_passe();
         string getPrenom();
         string getNom();
+        string getTitre();
+        int getAge();
         static Passager* getPassager(string);
         void afficherPassager();
         static void chargerPassagers();
